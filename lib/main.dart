@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BlueCold',
+      title: 'Micocoils',
       theme: theme1,
       debugShowCheckedModeBanner: false,
       home: FirebaseAuth.instance.currentUser == null ? const LoginScreen() : const HomeNavigation(),

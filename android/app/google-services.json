@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "522305811299",
+    "project_id": "microcoils-fd0e9",
+    "storage_bucket": "microcoils-fd0e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522305811299:android:95e648d9b3f3b261405956",
+        "android_client_info": {
+          "package_name": "com.example.microcoils"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522305811299-9tg20uks2l2ieot6pep0iqjvsv6so3rk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIe009TsLs4p5cb1998ZMLmSUAMC9RTg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522305811299-9tg20uks2l2ieot6pep0iqjvsv6so3rk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
