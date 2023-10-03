@@ -17,9 +17,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Screen(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Settings"),
+        ),
         body: Column(
           children: [
-            const CustomAppBar(title: "Settings"),
             Column(
               children: [
                 settingsTile(

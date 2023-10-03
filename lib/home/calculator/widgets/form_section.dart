@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 
 class FormSection extends StatefulWidget {
   final List<Widget> formItems;
@@ -39,17 +40,16 @@ class _FormSectionState extends State<FormSection> with SingleTickerProviderStat
               });
             },
             child: Container(
-              color: Colors.white10,
+              color: ColorConstants.secondary.shade200,
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
                 children: [
                   Text(
                     widget.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: ColorConstants.secondary.shade800
+                        // fontSize: 16,
+                        ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

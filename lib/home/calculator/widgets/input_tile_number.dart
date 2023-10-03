@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 
 class InputTileNumber extends StatefulWidget {
   final String title;
@@ -34,8 +35,8 @@ class _InputTileNumberState extends State<InputTileNumber> {
   double percentage = 0;
   bool isActive = false;
 
-  TextStyle activeStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
-  TextStyle inActiveStyle = const TextStyle(color: Colors.black);
+  TextStyle activeStyle = const TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle inActiveStyle = TextStyle(color: ColorConstants.secondary.shade800);
   @override
   void initState() {
     focusNode.addListener(() {
@@ -83,7 +84,7 @@ class _InputTileNumberState extends State<InputTileNumber> {
           ),
           borderRadius: BorderRadius.circular(0.0),
         ),
-        tileColor: isActive ? Colors.blue.shade100.withOpacity(0.2) : null,
+        tileColor: isActive ? ColorConstants.primary.withOpacity(0.2) : null,
         enableFeedback: true,
         title: Text(widget.title, style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle),
         trailing: Container(

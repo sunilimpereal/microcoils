@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:microcoils/home/calculator/cold%20room%20calculator/other_detail.dart';
 import 'package:microcoils/home/calculator/cold%20room%20calculator/product_detail.dart';
 import 'package:microcoils/home/calculator/cold%20room%20calculator/result_screen_coldroom.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 import '../../../utils/screen.dart';
 import '../widgets/tab_bar.dart';
 import '../widgets/tab_bar_view.dart';
@@ -18,7 +19,7 @@ class ColdRoomCalculatorScreen extends StatefulWidget {
   State<ColdRoomCalculatorScreen> createState() => _ColdRoomCalculatorScreenState();
 }
 
-class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> {
+class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> with SingleTickerProviderStateMixin {
   List<String> tabs = [
     "Ambient & Room",
     "Product",
@@ -26,10 +27,15 @@ class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> {
   ];
   int currentIndex = 0;
   late PageController pageController;
+  late TabController _tabController;
   @override
   void initState() {
     ColdRoomCalculator().setDefaultValues();
     pageController = PageController(initialPage: currentIndex);
+    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -37,71 +43,43 @@ class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> {
   Widget build(BuildContext context) {
     return Screen(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(CupertinoIcons.back)),
-                        const Text(
-                          "Cold Room",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              CupertinoPageRoute(
-                                builder: (context) => const ColdRoomCalculatorScreen(),
-                              ),
-                            );
-                            // ColdRoomCalculator().setDefaultValues();
-                            // setState(() {});
-                          },
-                          icon: const Icon(
-                            Icons.replay_rounded,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              details(),
-            ],
+          appBar: AppBar(
+            elevation: 0,
+            title: Text("Cold Room"),
+            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.summarize))],
           ),
-        ),
-        floatingActionButton: ElevatedButton(
-          style: ElevatedButton.styleFrom(elevation: 8),
-          onPressed: () {
-            Map e = ColdRoomCalculator().calculate();
-            log(e.toString());
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => const ColdRoomResultScreen(),
-              ),
-            );
-          },
-          child: const Text("Summary"),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                details(),
+              ],
+            ),
+          ),
+          floatingActionButton: Container(
+            padding: EdgeInsets.all(8),
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(elevation: 8),
+              onPressed: () {
+                if (_tabController.index == 2) {
+                  Map e = ColdRoomCalculator().calculate();
+                  log(e.toString());
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (context) => const ColdRoomResultScreen(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    _tabController.animateTo(_tabController.index + 1);
+                  });
+                }
+              },
+              child: _tabController.index == 2 ? const Text("Summary") : Text("Next"),
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          resizeToAvoidBottomInset: false),
     );
   }
 
@@ -113,6 +91,7 @@ class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> {
         child: Column(
           children: [
             CalculatorTabBar(
+              tabController: _tabController,
               tabs: tabs,
               currentIndex: currentIndex,
               onChanged: (p0) {
@@ -126,6 +105,7 @@ class _ColdRoomCalculatorScreenState extends State<ColdRoomCalculatorScreen> {
             ),
             CalculatorTabView(
               currentIndex: currentIndex,
+              tabController: _tabController,
               onPageChanged: (p0) {
                 setState(() {
                   currentIndex = p0;

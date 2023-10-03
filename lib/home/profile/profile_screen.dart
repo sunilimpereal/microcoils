@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microcoils/home/profile/profile_edit_screen.dart';
 import 'package:microcoils/home/profile/settings/settings_screen.dart';
+import 'package:microcoils/home/screen/widgets/drawer.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 import 'package:microcoils/utils/shared_preferences.dart';
 
 import '../../authentication/screens/login.dart';
@@ -19,47 +21,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Profile",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(
-                    CupertinoPageRoute(
-                      builder: (context) => const ProfileEditScreen(),
-                    ),
-                  )
-                      .then((value) {
-                    setState(() {});
-                  });
-                },
-                icon: const Icon(
-                  Icons.edit_note,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
         ),
-        nameSection(),
-        detailSection(),
-        buttons()
-      ],
+        title: Text("Profile"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                CupertinoPageRoute(
+                  builder: (context) => const ProfileEditScreen(),
+                ),
+              )
+                  .then((value) {
+                setState(() {});
+              });
+            },
+            icon: const Icon(
+              Icons.edit_note,
+            ),
+          ),
+        ],
+      ),
+      drawer: AppDrawer(),
+      body: Column(
+        children: [
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       const Text(
+          //         "Profile",
+          //         style: TextStyle(
+          //           fontSize: 20,
+          //           fontStyle: FontStyle.italic,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          nameSection(),
+          detailSection(),
+          buttons()
+        ],
+      ),
     );
   }
 
@@ -72,22 +90,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // profile image
-          Container(
-            width: size.width * 0.3,
-            height: size.width * 0.3,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(100),
-              image: sharedPrefs.photoUrl != ""
-                  ? DecorationImage(
-                      image: NetworkImage(sharedPrefs.photoUrl),
-                      fit: BoxFit.cover,
-                    )
-                  : const DecorationImage(
-                      image: AssetImage('assets/images/usernotfound.png'),
-                      fit: BoxFit.cover,
+          Stack(
+            children: [
+              Container(
+                width: size.width * 0.3,
+                height: size.width * 0.3,
+                decoration: BoxDecoration(
+                  color: ColorConstants.primary.shade200,
+                  borderRadius: BorderRadius.circular(100),
+                  image: sharedPrefs.photoUrl != ""
+                      ? DecorationImage(
+                          image: NetworkImage(sharedPrefs.photoUrl),
+                          fit: BoxFit.cover,
+                        )
+                      : const DecorationImage(
+                          image: AssetImage("assets/images/user_placeholder.png"),
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(80),
+                      color: ColorConstants.primary,
                     ),
-            ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           // name card
           SizedBox(
@@ -157,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               child: Text(
                 "Add $name",
-                style: const TextStyle(color: Colors.blue),
+                style: TextStyle(color: ColorConstants.primary),
               ),
             ),
       subtitle: Text(name),
@@ -185,6 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         ListTile(
           onTap: () {
+            sharedPrefs.setLoggedOut();
             Navigator.of(context).pushReplacement(
               CupertinoPageRoute(
                 builder: (context) => const LoginScreen(),

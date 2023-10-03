@@ -31,8 +31,8 @@ class _AppInputFieldState extends State<AppInputField> {
         keyboardType: widget.textInputType,
         // onSubmitted: widget.onSubmitted,
         style: const TextStyle(
-          fontSize: 18,
-        ),
+            // fontSize: 18,
+            ),
         validator: widget.validator,
         onChanged: widget.onChanged,
         decoration: InputDecoration(

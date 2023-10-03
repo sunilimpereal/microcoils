@@ -6,8 +6,6 @@ class Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: SafeArea(child: child));
+    return Container(color: Theme.of(context).scaffoldBackgroundColor, child: child);
   }
 }

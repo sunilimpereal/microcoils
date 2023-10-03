@@ -26,12 +26,15 @@ class _PdfInputScreenState extends State<PdfInputScreen> {
   Widget build(BuildContext context) {
     return Screen(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("Details"),
+          actions: [],
+        ),
         body: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const CustomAppBar(title: "Details"),
                 const SizedBox(
                   height: 16,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 
 class BottomNavBar extends StatefulWidget {
   final Function(int) onChanged;
@@ -13,7 +14,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        backgroundColor: Colors.white.withOpacity(0.8),
+        // backgroundColor: Colors.white.withOpacity(0.8),
+        // backgroundColor: ColorConstants.secondary.shade300,
+        elevation: 4,
         currentIndex: widget.currentIndex,
         onTap: (i) {
           widget.onChanged(i);

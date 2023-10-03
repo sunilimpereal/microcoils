@@ -150,7 +150,7 @@ class _BlastAmbientRoomFormState extends State<BlastAmbientRoomForm> {
                 ],
               ),
               const SizedBox(
-                height: 50,
+                height: 200,
               )
             ],
           ),

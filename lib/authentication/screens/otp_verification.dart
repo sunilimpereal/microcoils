@@ -1,9 +1,9 @@
-import 'dart:developer';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:microcoils/home/screen/home_screen.dart';
+import 'package:microcoils/main.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 
 import '../../home/profile/widgets/app_bar.dart';
 import '../../home/screen/home_navigation.dart';
@@ -34,6 +34,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   FocusNode focus4 = FocusNode();
   FocusNode focus5 = FocusNode();
   FocusNode focus6 = FocusNode();
+
+  String? error = null;
 
   @override
   void initState() {
@@ -85,26 +87,29 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       child: Scaffold(
         body: Column(
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
             const CustomAppBar(title: ""),
             Container(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     "Verification",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: ColorConstants.primary.shade400),
                   ),
-                  SizedBox(
-                    height: 8,
+                  const SizedBox(
+                    height: 16,
                   ),
-                  Text(
+                  const Text(
                     "Enter 6 digits verification code sent to your number",
                     style: TextStyle(),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                 ],
               ),
             ),
@@ -160,6 +165,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 16,
+            ),
+            error != null
+                ? Text(
+                    " Inalid Otp ! Please re enter the code",
+                    style: TextStyle(color: Colors.red),
+                  )
+                : Container()
           ],
         ),
       ),
@@ -178,7 +192,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: Colors.blueGrey.shade100,
+          color: ColorConstants.secondary.shade200,
           borderRadius: BorderRadius.circular(8),
         ),
         child: SizedBox(
@@ -202,9 +216,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   }
                 }
               },
-              decoration: const InputDecoration(
-                  isDense: true, border: InputBorder.none, focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 4, color: Colors.blue))),
-              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                isDense: true,
+                border: InputBorder.none,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(width: 2, color: ColorConstants.primary),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(1),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
             ),
           ),
         ),
@@ -215,7 +238,22 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _validate() {
     String otp = otp1.text + otp2.text + otp3.text + otp4.text + otp5.text + otp6.text;
     if (widget.otp == otp) {
-      Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const HomeNavigation()));
+      sharedPref.setLoggedIn();
+      Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => const HomeScreen()),
+        ModalRoute.withName('/'),
+      );
+    } else {
+      setState(() {
+        otp1.clear();
+        otp2.clear();
+        otp3.clear();
+        otp4.clear();
+        otp5.clear();
+        otp6.clear();
+        error = "Invalid Otp";
+        focus1.requestFocus();
+      });
     }
   }
 }

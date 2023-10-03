@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../utils/constants/color_constants.dart';
+
 class InputTileOption extends StatefulWidget {
   final String title;
   final List<String> options;
@@ -23,8 +25,9 @@ class InputTileOption extends StatefulWidget {
 
 class _InputTileOptionState extends State<InputTileOption> {
   bool isActive = false;
-  TextStyle activeStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
-  TextStyle inActiveStyle = const TextStyle(color: Colors.black);
+
+  TextStyle activeStyle = const TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle inActiveStyle = TextStyle(color: ColorConstants.secondary.shade800);
   //scroll
   late FixedExtentScrollController scrollController;
 
@@ -123,13 +126,13 @@ class _InputTileOptionState extends State<InputTileOption> {
                 ),
                 borderRadius: BorderRadius.circular(0.0),
               ),
-              tileColor: isActive ? Colors.blue.shade100.withOpacity(0.2) : null,
+              tileColor: isActive ? ColorConstants.primary.withOpacity(0.2) : null,
               enableFeedback: true,
               title: Text(widget.title, style: isActive ? activeStyle : inActiveStyle),
               // scroll selector
               trailing: Container(
                 height: 33,
-                width: MediaQuery.of(context).size.width * 0.36,
+                width: MediaQuery.of(context).size.width * 0.4,
                 alignment: Alignment.centerRight,
                 child: CupertinoPicker(
                   key: _key,

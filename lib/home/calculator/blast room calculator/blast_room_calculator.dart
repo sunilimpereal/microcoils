@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:microcoils/home/calculator/blast%20room%20calculator/product_detail.dart';
 import 'package:microcoils/home/calculator/blast%20room%20calculator/result_screen_blast.dart';
-
+import 'package:microcoils/utils/constants/color_constants.dart';
 import '../../../utils/screen.dart';
 import '../cold room calculator/ambient_room_detail.dart';
-
 import '../widgets/tab_bar.dart';
 import '../widgets/tab_bar_view.dart';
 import 'blast_ambient_room.dart';
@@ -21,7 +20,7 @@ class BlastRoomCalculatorScreen extends StatefulWidget {
   State<BlastRoomCalculatorScreen> createState() => _BlastRoomCalculatorScreenState();
 }
 
-class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
+class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> with SingleTickerProviderStateMixin {
   List<String> tabs = [
     "Ambient & Room",
     "Product",
@@ -29,10 +28,14 @@ class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
   ];
   int currentIndex = 0;
   late PageController pageController;
+  late TabController _tabController;
   @override
   void initState() {
     pageController = PageController(initialPage: currentIndex);
-
+    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -40,47 +43,40 @@ class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
   Widget build(BuildContext context) {
     return Screen(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(CupertinoIcons.back)),
-                    const Text(
-                      "Blast Room",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              details(),
-            ],
+          appBar: AppBar(
+            title: Text("Blast Room"),
+            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.summarize))],
           ),
-        ),
-        floatingActionButton: ElevatedButton(
-          style: ElevatedButton.styleFrom(elevation: 8),
-          onPressed: () {
-            BlastRoomCalculator().calculate();
-
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => const BlastRoomResultScreen(),
-              ),
-            );
-          },
-          child: const Text("Summary"),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                details(),
+              ],
+            ),
+          ),
+          floatingActionButton: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(elevation: 8),
+              onPressed: () {
+                if (_tabController.index == 2) {
+                  BlastRoomCalculator().calculate();
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (context) => const BlastRoomResultScreen(),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    _tabController.animateTo(_tabController.index + 1);
+                  });
+                }
+              },
+              child: _tabController.index == 2 ? const Text("Summary") : const Text("Next"),
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+          resizeToAvoidBottomInset: false),
     );
   }
 
@@ -92,6 +88,7 @@ class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
         child: Column(children: [
           CalculatorTabBar(
             tabs: tabs,
+            tabController: _tabController,
             currentIndex: currentIndex,
             onChanged: (p0) {
               setState(() {
@@ -103,6 +100,7 @@ class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
             },
           ),
           CalculatorTabView(
+              tabController: _tabController,
               currentIndex: currentIndex,
               onPageChanged: (p0) {
                 setState(() {
@@ -110,7 +108,7 @@ class _BlastRoomCalculatorScreenState extends State<BlastRoomCalculatorScreen> {
                 });
               },
               pageController: pageController,
-              views: [
+              views: const [
                 BlastAmbientRoomForm(),
                 BlastRoomProductDetail(),
                 BlastRoomOtherDetail(),

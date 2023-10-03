@@ -20,7 +20,7 @@ class _OtherDetailState extends State<OtherDetail> {
         child: Column(
           children: [
             FormSection(
-              title: "Produt Detail",
+              title: "Product Detail",
               formItems: [
                 InputTileOption(
                   title: "Door Opening Frequency",
@@ -123,7 +123,7 @@ class _OtherDetailState extends State<OtherDetail> {
                   },
                 ),
                 const SizedBox(
-                  height: 100,
+                  height: 200,
                 )
               ],
             )

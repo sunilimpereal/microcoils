@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:microcoils/authentication/screens/signup_screen.dart';
 import 'package:microcoils/authentication/screens/widgets/input_field.dart';
 import 'package:microcoils/authentication/screens/widgets/login_top_section.dart';
 import 'package:microcoils/authentication/screens/widgets/social_login_button.dart';
+import 'package:microcoils/home/screen/home_screen.dart';
 
 import '../../home/screen/home_navigation.dart';
+import '../../home/splash_screen.dart';
 import '../../utils/shared_preferences.dart';
 import '../data/models/login_request_model.dart';
 import '../data/repository/auth_repository.dart';
@@ -32,12 +35,56 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: KeyboardDismissOnTap(
-        child: Center(
-          child: Column(
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          // padding: EdgeInsets.all(8),
+          child: Stack(
             children: [
-              const LoginTopSection(),
-              inputSection(context),
+              // Positioned(
+              //   top: 0,
+              //   child: Container(
+              //     width: MediaQuery.of(context).size.width,
+              //     height: MediaQuery.of(context).size.height * 0.45,
+              //     decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         image: DecorationImage(image: const AssetImage("assets/images/login_bg.png"), fit: BoxFit.fitWidth, opacity: 01)),
+              //   ),
+              // ),
+              Positioned(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 150,
+                    ),
+                    const LoginTopSection(),
+                    inputSection(context),
+                    signupText(),
+                  ],
+                ),
+              ),
+              ClipPath(
+                clipper: MyCustomClipperTop(),
+                child: Container(
+                  width: 250,
+                  height: 200,
+                  color: Colors.red,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: ClipPath(
+                  clipper: MyCustomClipperBottom(),
+                  child: Container(
+                    width: 250,
+                    height: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -88,13 +135,40 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 16,
             ),
+            signupButton(),
+            Container(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      height: 0.5,
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text("Or login with"),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      height: 0.5,
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      color: Colors.grey,
+                    ),
+                  ],
+                )),
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    // width: MediaQuery.of(context).size.width * 0.4,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -103,7 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  signupButton(),
                 ],
               ),
             )
@@ -114,18 +187,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget signupButton() {
-    return Padding(
+    return Container(
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 14,
-          ),
-          shape: const StadiumBorder(),
-          elevation: 3,
-          shadowColor: Colors.lightBlue.shade100,
-        ),
+        style: ElevatedButton.styleFrom(),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             AuthRepository()
@@ -155,7 +221,6 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -164,9 +229,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(
-                width: 8,
               ),
               const Icon(Icons.keyboard_arrow_right_rounded)
             ],
@@ -178,6 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget googleSignIn() {
     return SocialLoginButton(
+      name: "Google",
       onpressed: () {
         AuthRepository().signInWithGoogle().then((user) {
           sharedPrefs.setUserDetails(
@@ -190,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
             photoUrl: user.user?.photoURL ?? '',
           );
 
-          Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const HomeNavigation()));
+          Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const HomeScreen()));
         });
       },
       image: "assets/images/google_logo.png",
@@ -199,8 +262,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget facebookSignIn() {
     return SocialLoginButton(
+      name: "Facebook",
       onpressed: () {},
       image: "assets/images/facebook_logo.png",
+    );
+  }
+
+  Widget signupText() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Do not have an account?"),
+          TextButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const SignUpScreen();
+              }));
+            },
+            child: Text(
+              "Sign Up",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

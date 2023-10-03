@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:microcoils/home/screen/widgets/drawer.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 import '../../../utils/screen.dart';
 import '../widgets/app_bar.dart';
 
@@ -10,87 +12,109 @@ class AboutUsScreen extends StatefulWidget {
 }
 
 class _AboutUsScreenState extends State<AboutUsScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    return Screen(
-        child: Scaffold(
-      body: Column(
-        children: const [
-          CustomAppBar(
-            title: "Disclaimer",
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+        title: Text('About US'),
+      ),
+      drawer: AppDrawer(),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "About Micro Coils",
+                  // textAlign: TextAlign.left,
+                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+              ),
+              Text(
+                "Micro Coils was established to fill the gap between demand and supply of high quality, reliable and cost-effective coils in the HVACR Industry across Asia. We saw an early success with customers across geographies not just because of our strong product, but also due to our even stronger design and post-sales support to our customers. Our engineers work closely with every single customer to meet their unique requirements in terms of product design and timeline of deliveries. Micro Coils go out of our way to help customers meet their business requirements and ensure complete customer satisfaction.",
+                textAlign: TextAlign.left,
+                style: TextStyle(color: Colors.black),
+              ),
+              Divider(
+                height: 24,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "Our Products",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+              ),
+              productTile(
+                  description:
+                      'Micro Coils\' Heat Exchangers are uniquely affordable, of extremely high quality, and delivered on time without compromise. We provide design expertise for custom development and tailor-made solutions to meet your business requirements.',
+                  image: ImageConstants.coils,
+                  title: 'Heat Exchangers'),
+              productTile(
+                  description:
+                      'Ideal for a range of applications, including evaporative condensers, milk tanks, process tanks, immersion chillers, ice machines, heat recovery banks, conveyors, beer/wine tanks, falling film chillers, and special-purpose cooling for dirty fluids..',
+                  image: ImageConstants.pillowPlates,
+                  title: 'Pillow Plates'),
+              productTile(
+                  description:
+                      'Micro Coils\' integral horsepower condensing units and indoor cooling units deliver exceptional cooling. They are well-suited for various cold chain applications, such as milk cooling, fruits & vegetables, cold storage, meat/poultry, fishery, and food services.',
+                  image: ImageConstants.condensingUnit,
+                  title: 'Condensing Units'),
+              productTile(
+                  description:
+                      'Our evaporator units offer a range of features, including low noise levels, high-performance fans, low energy consumption, highly efficient heat exchangers, easy installation, and maintenance. They are available with fin spacing options of 4, 4.5, 6.7, 9, and 10mm.',
+                  image: ImageConstants.evaporatorUnits,
+                  title: 'Evaporators Units'),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget productTile({required String title, required String image, required String description}) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              title,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(image),
+              ),
+            ),
+          ),
+          Text(description),
+          SizedBox(
+            height: 8,
+          ),
+          Divider(),
         ],
       ),
-    ));
+    );
   }
 }
-
-
-////
-///02:50
-// <
-// * 27.0 Y 46100%4
-// About Us
-// Consistent
-// might quality TS paramount
-// importance at Blue Cold Refrigeration and as
-// a result of which Blue Cold has reached
-// leadership position in the cold room and cold
-// storage segment.
-// The product range of Blue Cold comprises:
-// • Freon Evaporators
-// • Freon Blast Freezers
-// • Freon Blast Chillers
-// • Dual Discharge Evaporators
-// Air Cooled & Water Cooled Condensing
-// Units
-// • Rack Systems
-// . Ammonia Unit Coolers
-// ● Ammonia Blast Freezers
-// These products are manufactured to world
-// class standards in India. Having its head
-// quarters and manufacturing units in
-// Bangalore, Blue cold has a team of
-// approximate 80 working professionals who
-// are operating from different parts of the
-// country like Mumbai, Pune, Ahmedabad,
-// Delhi, Chandigarh, Kolkata, Hyderabad and
-// Chennai. Efforts are being constantly taken
-// to increase this penetration level and to make
-// the world class quality product available in
-// the Indian subcontinent.
-// For further information you can contact us or
-// visit our website.
-
-
-// 02:50
-// <
-// About Us
-// 42.00
-// 461 100%4
-// BLUECOLD
-// REFRIGERATION
-// Blue Cold Refrigeration Pvt. Ltd. is an original
-// equipment manufacturer and supplier of
-// refrigeration systems for cold rooms and
-// cold storages. With continuous efforts and
-// adoption of latest technologies, Blue Cold
-// Refrigeration gained enormous experience in
-// developing world class refrigeration products
-// for medium, low and ultra-low temperatures.
-// Consistent high quality is paramount
-// importance at Blue Cold Refrigeration and as
-// a result of which Blue Cold has reached
-// leadership position in the cold room and cold
-// storage segment.
-// The product range of Blue Cold comprises:
-// • Freon Evaporators
-// • Freon Blast Freezers
-// • Freon Blast Chillers
-// • Rack Systems
-// ● Ammonia Unit Coolers
-// ● Ammonia Blast Freezers
-// • Dual Discharge Evaporators
-// Air Cooled & Water Cooled Condensing
-// Units
-// These products are manufactured to world

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:microcoils/utils/constants/color_constants.dart';
 
 class LoginTopSection extends StatefulWidget {
   const LoginTopSection({super.key});
@@ -17,31 +18,29 @@ class _LoginTopSectionState extends State<LoginTopSection> {
   double height = 0.5;
   @override
   Widget build(BuildContext context) {
-    return KeyboardVisibilityBuilder(
-      builder: (p0, isKeyboardVisible) {
-        height = isKeyboardVisible ? 0.3 : 0.5;
-        return ClipShadowPath(
-          clipper: CustomClipperLogin(),
-          shadow: Shadow(blurRadius: 20, color: Colors.blue.shade100),
-          child: Material(
-            elevation: 20,
-            color: Colors.red,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              height: MediaQuery.of(context).size.height * height,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.lightBlueAccent.shade100,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo.png'))),
-                ),
+    return Container(
+        // padding: const EdgeInsets.all(8),
+        // height: MediaQuery.of(context).size.height * 0.55,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Container(
+            //   width: MediaQuery.of(context).size.width,
+            //   height: 150,
+            //   decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo.png'))),
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(1), borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+              child: const Text(
+                "Login",
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30),
               ),
-            ),
-          ),
-        );
-      },
-    );
+            )
+          ],
+        ));
   }
 }
 

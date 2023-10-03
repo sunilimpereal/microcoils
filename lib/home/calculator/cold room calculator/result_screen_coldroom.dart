@@ -22,29 +22,29 @@ class _ColdRoomResultScreenState extends State<ColdRoomResultScreen> {
   Widget build(BuildContext context) {
     return Screen(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("Heat Load Summary"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => PdfInputScreen(
+                            ongeneratePdf: () {
+                              ColdRoomPdf().generatePdf();
+                            },
+                            onSharePdf: () {
+                              ColdRoomPdf().sharePdf();
+                            },
+                          )));
+                },
+                icon: const Icon(
+                  Icons.print,
+                ))
+          ],
+        ),
         body: Center(
           child: Column(
             children: [
-              CustomAppBar(
-                title: "Heat Load Summary",
-                options: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(
-                            builder: (context) => PdfInputScreen(
-                                  ongeneratePdf: () {
-                                    ColdRoomPdf().generatePdf();
-                                  },
-                                  onSharePdf: () {
-                                    ColdRoomPdf().sharePdf();
-                                  },
-                                )));
-                      },
-                      icon: const Icon(
-                        Icons.print,
-                      ))
-                ],
-              ),
               GestureDetector(
                 onLongPressMoveUpdate: (details) {
                   log("message`");
@@ -125,19 +125,32 @@ class _ColdRoomResultScreenState extends State<ColdRoomResultScreen> {
             ],
           ),
         ),
-        floatingActionButton: ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => PdfInputScreen(
-                        ongeneratePdf: () {
-                          ColdRoomPdf().generatePdf();
-                        },
-                        onSharePdf: () {
-                          ColdRoomPdf().sharePdf();
-                        },
-                      )));
-            },
-            child: const Text("pdf")),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => PdfInputScreen(
+                          ongeneratePdf: () {
+                            ColdRoomPdf().generatePdf();
+                          },
+                          onSharePdf: () {
+                            ColdRoomPdf().sharePdf();
+                          },
+                        )));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.edit_document),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text("PDF"),
+                ],
+              )),
+        ),
       ),
     );
   }

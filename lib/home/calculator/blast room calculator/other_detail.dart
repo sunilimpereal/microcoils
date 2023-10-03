@@ -20,7 +20,7 @@ class _BlastRoomOtherDetailState extends State<BlastRoomOtherDetail> {
       child: Column(
         children: [
           FormSection(
-            title: "Produt Detail",
+            title: "Product Detail",
             formItems: [
               InputTileOption(
                 title: "Door Opening Frequency",

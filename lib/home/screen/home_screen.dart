@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:microcoils/home/calculator/selector/selector_screen.dart';
 import 'package:microcoils/home/screen/widgets/calculator_card.dart';
+import 'package:microcoils/home/screen/widgets/drawer.dart';
+import 'package:microcoils/home/screen/widgets/home_card.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 
 import '../calculator/blast room calculator/blast_room_calculator.dart';
 import '../calculator/blast room calculator/data/calculator.dart';
@@ -16,41 +20,88 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Calculators",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (context) => const NotificationScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.notifications,
-                  color: Colors.black38,
-                ),
-              )
-            ],
-          ),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
         ),
-        calculatorSelectorSection(),
-      ],
+        // leading: Container(),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search)), IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none_rounded))],
+      ),
+      drawer: AppDrawer(),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: Column(
+        children: [
+          heading(),
+          SizedBox(
+            height: 16,
+          ),
+          // calculatorSelectorSection(),
+          calculatoeListSection()
+        ],
+      ),
+    );
+  }
+
+  Padding heading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+      child: RichText(
+        text: const TextSpan(
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+          children: <TextSpan>[
+            TextSpan(text: 'All Kinds of'),
+            TextSpan(text: ' Heating and Cooling ', style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: 'Applications'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget calculatoeListSection() {
+    return Container(
+      child: Column(
+        children: [
+          HomeCard(
+            onTap: () {
+              ColdRoomCalculator().setDefaultValues();
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
+            },
+            description: "Integral horsepower condensing units and indoor cooling units.",
+            heading: "Condensing Units",
+            image: ImageConstants.condensingUnit,
+          ),
+          HomeCard(
+            onTap: () {
+              BlastRoomCalculator().setDefaultValues();
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
+            },
+            description: "Heat Exchangers are uniquely affordable, of extremely high quality, and delivered on time",
+            heading: "Heat Exchanges",
+            image: ImageConstants.coils,
+          ),
+          HomeCard(
+            onTap: () {
+              BlastRoomCalculator().setDefaultValues();
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
+            },
+            description: "They are available with fin spacing options of 4, 4.5, 6.7, 9, and 10mm.",
+            heading: "Evaporators Units",
+            image: ImageConstants.evaporatorUnits,
+          )
+        ],
+      ),
     );
   }
 
@@ -68,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           CalculatorCard(
             name: "Cold \nRoom",
-            color: Colors.blue.shade800,
-            image: "cold-storage.png",
+            color: Colors.blue.shade900,
+            image: "cold-room.png",
             onTap: () {
               ColdRoomCalculator().setDefaultValues();
               Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
@@ -77,11 +128,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           CalculatorCard(
             name: "Blast \nRoom",
-            color: Colors.teal.shade800,
+            color: Colors.blue.shade800,
             image: "blast-room.png",
             onTap: () {
               BlastRoomCalculator().setDefaultValues();
               Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
+            },
+          ),
+          CalculatorCard(
+            name: "Selector",
+            color: Colors.blue.shade600,
+            image: "selector.png",
+            onTap: () {
+              BlastRoomCalculator().setDefaultValues();
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
             },
           ),
         ],

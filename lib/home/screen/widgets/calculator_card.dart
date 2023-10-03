@@ -62,12 +62,13 @@ class _CalculatorCardState extends State<CalculatorCard> with SingleTickerProvid
                   top: 25,
                   right: -50,
                   child: SizedBox(
-                    width: 160,
-                    height: 160,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.width * 0.5,
                     child: Opacity(
-                      opacity: 0.4,
+                      opacity: 1,
                       child: Image(
                         image: AssetImage("assets/images/${widget.image}"),
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
                   )),
@@ -79,6 +80,7 @@ class _CalculatorCardState extends State<CalculatorCard> with SingleTickerProvid
                   style: const TextStyle(
                     fontSize: 24,
                     color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               )),
