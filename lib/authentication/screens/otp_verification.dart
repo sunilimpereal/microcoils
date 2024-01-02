@@ -4,16 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:microcoils/home/screen/home_screen.dart';
 import 'package:microcoils/main.dart';
 import 'package:microcoils/utils/constants/color_constants.dart';
+import 'package:microcoils/utils/shared_preferences.dart';
 
+import '../../common/error_popup.dart';
 import '../../home/profile/widgets/app_bar.dart';
 import '../../home/screen/home_navigation.dart';
 import '../../utils/screen.dart';
+import '../data/repository/auth_repository.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String otp;
+  final String email;
   const OtpVerificationScreen({
     super.key,
     required this.otp,
+    required this.email,
   });
 
   @override
@@ -98,7 +103,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 children: [
                   Text(
                     "Verification",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: ColorConstants.primary.shade400),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: ColorConstants.primary.shade400),
                   ),
                   const SizedBox(
                     height: 16,
@@ -238,11 +246,27 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _validate() {
     String otp = otp1.text + otp2.text + otp3.text + otp4.text + otp5.text + otp6.text;
     if (widget.otp == otp) {
-      sharedPref.setLoggedIn();
-      Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(builder: (context) => const HomeScreen()),
-        ModalRoute.withName('/'),
-      );
+      AuthRepository().validateOtp(email: widget.email, otp: otp).then((value) {
+        // log(loginResponseToJson(value!));
+        if (value != null) {
+          sharedPrefs.setUserDetails(
+            id: value?.user?.id.toString() ?? '',
+            email: value?.user?.email ?? '',
+            name: value?.user?.name ?? '',
+            number: value?.user?.contact ?? '',
+            address: value?.user?.address ?? '',
+            company: value?.user?.companyName ?? '',
+            photoUrl: value?.user?.imageUrl ?? '',
+          );
+          sharedPrefs.setLoggedIn();
+          Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) => const HomeScreen()),
+            ModalRoute.withName('/'),
+          );
+        } else {
+          showErrorPopup(context, 'Login failed. Please check your credentials.');
+        }
+      });
     } else {
       setState(() {
         otp1.clear();

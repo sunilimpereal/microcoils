@@ -22,7 +22,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isVerfyNumber = false;
 
@@ -33,7 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
-          // padding: EdgeInsets.all(8),
           child: Stack(
             children: [
               Positioned(
@@ -46,11 +46,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Container(
                       decoration: BoxDecoration(
                           color: Colors.white.withOpacity(1),
-                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
                       child: const Text(
                         "Sign Up",
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30),
+                        style:
+                            TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30),
                       ),
                     ),
                     inputSection(context),
@@ -94,34 +96,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             AppInputField(
-              label: "Name",
+              label: "Email",
+              textEditingController: _emailController,
               onSubmitted: (value) {},
-              textEditingController: _nameController,
+              textInputType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter name';
+                  return 'Please enter email';
                 }
+                // Add additional email validation if needed
                 return null;
               },
             ),
             AppInputField(
-              label: "Mobile",
-              textEditingController: _numberController,
+              label: "Password",
+              textEditingController: _passwordController,
               onSubmitted: (value) {},
-              onChanged: (v) {
-                setState(() {
-                  isVerfyNumber = false;
-                });
-              },
-              textInputType: TextInputType.number,
+              isPassword: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter phone number';
+                  return 'Please enter password';
                 }
-                if (value.length < 10) {
-                  return 'Please enter a valid phone number';
-                }
-
+                // Add additional password validation if needed
                 return null;
               },
             ),
@@ -162,7 +158,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    // width: MediaQuery.of(context).size.width * 0.4,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -189,28 +184,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             AuthRepository()
-                .loginWithNumber(
-                    LoginRequest(socialId: _numberController.text, contact: _numberController.text, name: _nameController.text, email: ""))
+                .registerWithEmailPassword(
+              email: _emailController.text,
+              password: _passwordController.text,
+            )
                 .then((value) {
-              if (value!.otp == 0) {
+              if (value != null && value.otp == 0) {
                 setState(() {
                   isVerfyNumber = true;
                 });
                 return;
               }
-              sharedPrefs.setUserDetails(
-                id: value.user.id.toString(),
-                email: value.user.email ?? '',
-                name: value.user.name,
-                number: value.user.contact,
-                address: value.user.address ?? '',
-                company: value.user.companyName ?? '',
-                photoUrl: value.user.imageUrl ?? '',
-              );
+              // sharedPrefs.setUserDetails(
+              //   id: value.user.id.toString(),
+              //   email: value.user.email ?? '',
+              //   name: value.user.name,
+              //   number: value.user.contact,
+              //   address: value.user.address ?? '',
+              //   company: value.user.companyName ?? '',
+              //   photoUrl: value.user.imageUrl ?? '',
+              // );
               Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                        otp: value.otp.toString(),
-                      )));
+                builder: (context) => OtpVerificationScreen(
+                  otp: value?.otp.toString() ?? '',
+                  email: _emailController.text,
+                ),
+              ));
             });
           }
         },
@@ -261,31 +260,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       name: "Facebook",
       onpressed: () {},
       image: "assets/images/facebook_logo.png",
-    );
-  }
-
-  Widget loginTest() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Already have an account?"),
-          TextButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const SignUpScreen();
-              }));
-            },
-            child: const Text(
-              "Log In",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

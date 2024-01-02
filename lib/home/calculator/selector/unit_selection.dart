@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:microcoils/home/calculator/selector/selector_screen.dart';
+import 'package:microcoils/main.dart';
 
 import '../../../utils/constants/color_constants.dart';
 import '../widgets/input_tile_option.dart';
+import 'data/sharedpref_selector.dart';
 
 class UnitSelectionTab extends StatefulWidget {
   const UnitSelectionTab({super.key});
@@ -24,13 +26,15 @@ class _UnitSelectionTabState extends State<UnitSelectionTab> {
         InputTileOption(
           title: "Models",
           options: const [
-            "Any Series",
-            "Series 1",
-            "Series 2",
-            "Series 3",
+            "MEP",
+            "MEB",
+            "MEC",
+            "MEF",
           ],
-          inititalValue: "Any Series",
-          onChanged: (value) {},
+          inititalValue: sharedPrefSelector.model,
+          onChanged: (value) {
+            sharedPrefSelector.setModel(value);
+          },
         ),
       ],
     );
@@ -53,6 +57,7 @@ class _UnitSelectionTabState extends State<UnitSelectionTab> {
                         setState(() {
                           option = a;
                         });
+                        sharedPrefSelector.setUnitType(a);
                       }),
                   SizedBox(
                     width: 8,
@@ -61,9 +66,10 @@ class _UnitSelectionTabState extends State<UnitSelectionTab> {
                       title: "Condensers",
                       option: option,
                       onchanged: (a) {
-                        setState(() {
-                          option = a;
-                        });
+                        // setState(() {
+                        //   option = a;
+                        // });
+                        // sharedPrefSelector.setUnitType(a);
                       }),
                 ],
               ),

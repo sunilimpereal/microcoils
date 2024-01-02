@@ -9,94 +9,98 @@ LoginResponse loginResponseFromJson(String str) => LoginResponse.fromJson(json.d
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 
 class LoginResponse {
-  LoginResponse({
-    required this.otp,
-    required this.message,
-    required this.user,
-  });
+  String? message;
+  int? userId;
+  User? user;
+  int? statusCode;
+  String? otp;
 
-  int otp;
-  String message;
-  User user;
+  LoginResponse({this.message, this.userId, this.user, this.statusCode, this.otp});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-        otp: json["otp"] ?? 0,
         message: json["message"],
-        user: User.fromJson(json["user"]),
+        userId: json["userId"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        statusCode: json["statusCode"],
+        otp: json["otp"],
       );
 
   Map<String, dynamic> toJson() => {
-        "otp": otp,
         "message": message,
-        "user": user.toJson(),
+        "userId": userId,
+        "user": user?.toJson(),
+        "statusCode": statusCode,
       };
 }
 
 class User {
+  dynamic applicationVersion;
+  dynamic address;
+  dynamic os;
+  dynamic companyName;
+  int? isActive;
+  dynamic deviceId;
+  dynamic createdon;
+  String? password;
+  dynamic osVersion;
+  dynamic imageUrl;
+  String? contact;
+  dynamic socialId;
+  dynamic name;
+  int? id;
+  String? email;
+
   User({
-    required this.id,
-    required this.name,
-    required this.companyName,
+    this.applicationVersion,
+    this.address,
+    this.os,
+    this.companyName,
+    this.isActive,
+    this.deviceId,
+    this.createdon,
+    this.password,
+    this.osVersion,
     this.imageUrl,
-    required this.address,
-    required this.email,
-    required this.contact,
-    required this.os,
-    required this.osVersion,
-    required this.applicationVersion,
-    required this.deviceId,
-    required this.socialId,
-    required this.isActive,
-    required this.createdon,
+    this.contact,
+    this.socialId,
+    this.name,
+    this.id,
+    this.email,
   });
 
-  int id;
-  String name;
-  String? companyName;
-  String? imageUrl;
-  String? address;
-  String? email;
-  String contact;
-  String? os;
-  String? osVersion;
-  String? applicationVersion;
-  String? deviceId;
-  String socialId;
-  int isActive;
-  DateTime createdon;
-
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        name: json["name"],
-        companyName: json["companyName"],
-        imageUrl: json["imageUrl"],
-        address: json["address"],
-        email: json["email"],
-        contact: json["contact"],
-        os: json["os"],
-        osVersion: json["osVersion"],
         applicationVersion: json["applicationVersion"],
-        deviceId: json["deviceId"],
-        socialId: json["socialId"],
+        address: json["address"],
+        os: json["os"],
+        companyName: json["companyName"],
         isActive: json["isActive"],
-        createdon: DateTime.parse(json["createdon"]),
+        deviceId: json["deviceId"],
+        createdon: json["createdon"],
+        password: json["password"],
+        osVersion: json["osVersion"],
+        imageUrl: json["imageUrl"],
+        contact: json["contact"],
+        socialId: json["socialId"],
+        name: json["name"],
+        id: json["id"],
+        email: json["email"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "companyName": companyName,
-        "imageUrl": imageUrl,
-        "address": address,
-        "email": email,
-        "contact": contact,
-        "os": os,
-        "osVersion": osVersion,
         "applicationVersion": applicationVersion,
-        "deviceId": deviceId,
-        "socialId": socialId,
+        "address": address,
+        "os": os,
+        "companyName": companyName,
         "isActive": isActive,
-        "createdon":
-            "${createdon.year.toString().padLeft(4, '0')}-${createdon.month.toString().padLeft(2, '0')}-${createdon.day.toString().padLeft(2, '0')}",
+        "deviceId": deviceId,
+        "createdon": createdon,
+        "password": password,
+        "osVersion": osVersion,
+        "imageUrl": imageUrl,
+        "contact": contact,
+        "socialId": socialId,
+        "name": name,
+        "id": id,
+        "email": email,
       };
 }

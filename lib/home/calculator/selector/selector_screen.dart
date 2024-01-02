@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:microcoils/home/calculator/selector/air_coolers.dart';
+import 'package:microcoils/home/calculator/selector/data/calulator_selector.dart';
 import 'package:microcoils/home/calculator/selector/thermodynamics.dart';
 import 'package:microcoils/home/calculator/selector/unit_selection.dart';
 import 'package:microcoils/utils/constants/color_constants.dart';
@@ -28,6 +29,11 @@ class _SelectorScreenState extends State<SelectorScreen> with SingleTickerProvid
   void initState() {
     pageController = PageController(initialPage: currentIndex);
     _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
+    SelectorCalculator().setDefaultValues();
+
     super.initState();
   }
 
@@ -45,18 +51,20 @@ class _SelectorScreenState extends State<SelectorScreen> with SingleTickerProvid
         floatingActionButton: Container(
           padding: const EdgeInsets.all(8),
           width: MediaQuery.of(context).size.width * 0.9,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(elevation: 8),
-            onPressed: () {
-              if (_tabController.index == 1) {
-              } else {
-                setState(() {
-                  _tabController.animateTo(_tabController.index + 1);
-                });
-              }
-            },
-            child: _tabController.index == 1 ? const Text("Summary") : const Text("Next"),
-          ),
+          child: _tabController.index == 2
+              ? Container()
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(elevation: 8),
+                  onPressed: () {
+                    if (_tabController.index == 2) {
+                    } else {
+                      setState(() {
+                        _tabController.animateTo(_tabController.index + 1);
+                      });
+                    }
+                  },
+                  child: _tabController.index == 2 ? null : const Text("Next"),
+                ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         resizeToAvoidBottomInset: false);
@@ -75,7 +83,8 @@ class _SelectorScreenState extends State<SelectorScreen> with SingleTickerProvid
               currentIndex: currentIndex,
               onChanged: (p0) {
                 setState(() {
-                  pageController.animateToPage(p0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                  pageController.animateToPage(p0,
+                      duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
                   Future.delayed(const Duration(milliseconds: 500)).then((value) {
                     currentIndex = p0;
                   });

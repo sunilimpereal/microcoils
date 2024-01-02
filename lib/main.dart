@@ -4,6 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:microcoils/authentication/bloc/login_bloc.dart';
+import 'package:microcoils/home/calculator/selector/data/sharedpref_selector.dart';
 import 'package:microcoils/home/splash_screen.dart';
 import 'package:microcoils/theme/theme1.dart';
 import 'package:microcoils/utils/ApiUrls.dart';
@@ -28,6 +31,7 @@ void main() async {
   await sharedPref.init();
   await sharedPrefColdRoom.init();
   await sharedPrefBlastRoom.init();
+  await sharedPrefSelector.init();
 
   runApp(const MyApp());
 }
@@ -58,13 +62,18 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Micocoils',
-      theme: theme1,
-      debugShowCheckedModeBanner: false,
-      // home: const HomeNavigation(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LoginBloc()),
+      ],
+      child: MaterialApp(
+        title: 'Micocoils',
+        theme: theme1,
+        debugShowCheckedModeBanner: false,
+        // home: const HomeScreen(),
 
-      home: SplashScreen(),
+        home: SplashScreen(),
+      ),
     );
   }
 }

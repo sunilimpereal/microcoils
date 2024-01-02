@@ -145,14 +145,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
-                //comapny name
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  child: const Text(
-                    "Blue Cold",
-                    style: TextStyle(),
-                  ),
-                )
+                // //comapny name
+                // Container(
+                //   padding: const EdgeInsets.all(4),
+                //   child: const Text(
+                //     "Blue Cold",
+                //     style: TextStyle(),
+                //   ),
+                // )
               ],
             ),
           )
@@ -168,7 +168,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           detailTile(name: "Phone", detail: sharedPrefs.number, icon: CupertinoIcons.phone_fill),
           detailTile(name: "Email", detail: sharedPrefs.email, icon: CupertinoIcons.mail_solid),
-          detailTile(name: "Address", detail: sharedPrefs.address, icon: CupertinoIcons.location_solid)
+          detailTile(
+              name: "Address", detail: sharedPrefs.address, icon: CupertinoIcons.location_solid)
         ],
       ),
     );

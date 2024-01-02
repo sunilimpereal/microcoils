@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:microcoils/home/calculator/selector/data/sharedpref_selector.dart';
 import 'package:microcoils/home/calculator/widgets/form_section.dart';
+import 'package:microcoils/main.dart';
 
 import '../widgets/input_tile_number.dart';
 import '../widgets/input_tile_option.dart';
@@ -24,44 +26,53 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
             formItems: [
               InputTileNumber(
                 title: "Capacity",
-                initialValue: 3.5,
+                initialValue: sharedPrefSelector.capacity,
                 maxValue: 5,
                 minValue: 1,
                 gapValue: 5,
                 unit: "kW",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  sharedPrefSelector.setCapacity(double.parse(value));
+                },
               ),
               InputTileOption(
                 title: "Refrigerant",
                 options: const [
-                  "R404A",
+                  "R134A",
                   "A404A",
-                  "R404b",
+                  "R507b",
+                  "R22",
                 ],
-                inititalValue: "R404A",
-                onChanged: (value) {},
+                inititalValue: sharedPrefSelector.refrigerant,
+                onChanged: (value) {
+                  sharedPrefSelector.setRefrigerant(value);
+                },
               ),
               InputTileNumber(
                 title: "Evaporation Temp",
-                initialValue: -8,
+                initialValue: sharedPrefSelector.evaporationTemp,
                 maxValue: 15,
                 minValue: -10,
                 gapValue: 1,
                 unit: "°C",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  sharedPrefSelector.setEvaporationTemp(double.parse(value));
+                },
               ),
               InputTileNumber(
                 title: "Condenser Temp",
-                initialValue: 45,
+                initialValue: sharedPrefSelector.condenserTemp,
                 maxValue: 100,
                 minValue: 0,
                 gapValue: 5,
                 unit: "°C",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  sharedPrefSelector.setCondenserTemp(double.parse(value));
+                },
               ),
               InputTileNumber(
                 title: "RH",
-                initialValue: 78,
+                initialValue: sharedPrefSelector.rh,
                 maxValue: 100,
                 minValue: 0,
                 gapValue: 5,
@@ -70,12 +81,14 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
               ),
               InputTileNumber(
                 title: "Room Temp",
-                initialValue: 0,
+                initialValue: sharedPrefSelector.roomTemp,
                 maxValue: 100,
                 minValue: 0,
                 gapValue: 5,
                 unit: "°C",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  sharedPrefSelector.setRoomTemp(double.parse(value));
+                },
               ),
             ],
           ),
@@ -85,22 +98,30 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
               InputTileOption(
                 title: "Fin Spacing",
                 options: const [
-                  "Any",
-                  "item 1",
-                  "item 2",
+                  "4",
+                  "4.5",
+                  "6",
+                  "7",
+                  "9",
+                  "10",
                 ],
-                inititalValue: "Any",
-                onChanged: (value) {},
+                inititalValue: sharedPrefSelector.finSpacing.toString(),
+                onChanged: (value) {
+                  sharedPrefSelector.setFinSpacing(double.parse(value));
+                },
               ),
               InputTileOption(
                 title: "Defrosting",
                 options: const [
-                  "Electrical defrost",
-                  "item 2",
-                  "item 3",
+                  "Electrical Defrost",
+                  "Air Defrost",
+                  "Hot Gas Defrost",
+                  "Without Defrost",
                 ],
-                inititalValue: "Electrical defrost",
-                onChanged: (value) {},
+                inititalValue: sharedPrefSelector.defrosting,
+                onChanged: (value) {
+                  sharedPrefSelector.setDefrosting(value);
+                },
               ),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
@@ -9,6 +10,45 @@ class ApiRequest<ReqModel, ResModel> {
     'Accept': 'application/json',
     // 'Authorization': '<Your token>'
   };
+  Future<ResModel?> postLogin({
+    required String url,
+    required ReqModel request,
+    required Function(String) reponseFromJson,
+    required Function(ReqModel) requestToJson,
+  }) async {
+    // try {
+    var uri = Uri.parse(ApiUrls.baseUrl + url);
+    log("ApiRequest POST : $uri");
+    log("ApiRequest Body : ${requestToJson(request)}");
+    var response = await http.post(
+      uri,
+      body: requestToJson(request),
+      headers: requestHeaders,
+    );
+
+    log("ApiRequest Response ${response.statusCode} : ${response.body}");
+    if (response.statusCode == 202 || response.statusCode == 200) {
+      try {
+        log(response.body);
+        Map<String, dynamic> parsedData = json.decode(response.body);
+        if (parsedData["statusCode"] == 200) {
+          ResModel responseModel = reponseFromJson(response.body);
+          return responseModel;
+        }
+        if (parsedData["statusCode"] == 202) {
+          ResModel responseModel = reponseFromJson(response.body);
+          return responseModel;
+        }
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+    // } catch (e) {
+    //   return null;
+    // }
+  }
+
   Future<ResModel?> post({
     required String url,
     required ReqModel request,
@@ -25,9 +65,13 @@ class ApiRequest<ReqModel, ResModel> {
       headers: requestHeaders,
     );
     log("ApiRequest Response ${response.statusCode} : ${response.body}");
-    if (response.statusCode == 202) {
-      ResModel responseModel = reponseFromJson(response.body);
-      return responseModel;
+    if (response.statusCode == 202 || response.statusCode == 200) {
+      try {
+        ResModel responseModel = reponseFromJson(response.body);
+        return responseModel;
+      } catch (e) {
+        return null;
+      }
     }
     return null;
     // } catch (e) {

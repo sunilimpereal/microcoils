@@ -7,15 +7,16 @@ class AppInputField extends StatefulWidget {
   final Function(String) onSubmitted;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
-  const AppInputField({
-    super.key,
-    required this.label,
-    this.textInputType = TextInputType.text,
-    required this.textEditingController,
-    required this.onSubmitted,
-    this.onChanged,
-    this.validator,
-  });
+  final bool isPassword;
+  const AppInputField(
+      {super.key,
+      required this.label,
+      this.textInputType = TextInputType.text,
+      required this.textEditingController,
+      required this.onSubmitted,
+      this.onChanged,
+      this.validator,
+      this.isPassword = false});
 
   @override
   State<AppInputField> createState() => _AppInputFieldState();
@@ -34,7 +35,9 @@ class _AppInputFieldState extends State<AppInputField> {
             // fontSize: 18,
             ),
         validator: widget.validator,
+
         onChanged: widget.onChanged,
+        obscureText: widget.isPassword,
         decoration: InputDecoration(
           labelText: widget.label,
           labelStyle: const TextStyle(
