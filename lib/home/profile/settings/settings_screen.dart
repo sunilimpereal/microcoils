@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../utils/ApiUrls.dart';
 import '../../../utils/screen.dart';
 import '../widgets/app_bar.dart';
 
@@ -26,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 settingsTile(
                     ontap: () {
-                      _launchUrl(url: "https://www.bluecoldref.com/company/about-us");
+                      _launchUrl(url: ApiUrls.aboutUsurl);
                       // Navigator.of(context).push(
                       //   CupertinoPageRoute(
                       //     builder: (context) => const DisclaimerScreen(),
@@ -37,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: "About Us"),
                 settingsTile(
                   ontap: () {
-                    _launchUrl(url: "https://www.bluecoldref.com/company/contact-us");
+                    _launchUrl(url: ApiUrls.contactUsUrl);
                   },
                   icon: Icons.info,
                   title: "Contact Us",

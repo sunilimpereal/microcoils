@@ -58,8 +58,8 @@ class SharedPrefSelector {
     _sharedPref!.setDouble(CondenserTemp, value);
   }
 
-  setRH(String value) {
-    _sharedPref!.setString(RH, value);
+  setRH(double value) {
+    _sharedPref!.setDouble(RH, value);
   }
 
   setDT1(double value) {

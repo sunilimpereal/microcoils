@@ -29,6 +29,8 @@ class ApiRequest<ReqModel, ResModel> {
     log("ApiRequest Response ${response.statusCode} : ${response.body}");
     if (response.statusCode == 202 || response.statusCode == 200) {
       try {
+        ResModel responseModel = reponseFromJson(response.body);
+        return responseModel;
         log(response.body);
         Map<String, dynamic> parsedData = json.decode(response.body);
         if (parsedData["statusCode"] == 200) {

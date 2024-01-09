@@ -1,7 +1,8 @@
 // ignore_for_file: file_names
 
 class ApiUrls {
-  static const String baseUrl = 'http://aetheria.zymofar.com:8082/bcold/';
+  // static const String baseUrl = 'http://aetheria.zymofar.com:8082/bcold/';
+  static const String baseUrl = 'http://microcoil.zymofar.com:8082/m-coil/';
   static const String loginEmailPassword = 'user/microCool/login';
   static const String validateOtp = 'user/microCool/validateOtp';
   static const String airCoolers = 'airCoolers/calculate';

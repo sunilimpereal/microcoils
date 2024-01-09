@@ -33,7 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         // leading: Container(),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search)), IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none_rounded))],
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none_rounded))
+        ],
       ),
       drawer: AppDrawer(),
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -61,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           children: <TextSpan>[
             TextSpan(text: 'All Kinds of'),
-            TextSpan(text: ' Heating and Cooling ', style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: ' Heating and Cooling ', style: const TextStyle(fontWeight: FontWeight.bold)),
             TextSpan(text: 'Applications'),
           ],
         ),
@@ -76,25 +80,29 @@ class _HomeScreenState extends State<HomeScreen> {
           HomeCard(
             onTap: () {
               ColdRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
             },
             description: "Integral horsepower condensing units and indoor cooling units.",
-            heading: "Condensing Units",
+            heading: "Cold Room Calculator",
             image: ImageConstants.condensingUnit,
           ),
           HomeCard(
             onTap: () {
               BlastRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
             },
-            description: "Heat Exchangers are uniquely affordable, of extremely high quality, and delivered on time",
-            heading: "Heat Exchanges",
+            description:
+                "Heat Exchangers are uniquely affordable, of extremely high quality, and delivered on time",
+            heading: "Blast Room Calculator",
             image: ImageConstants.coils,
           ),
           HomeCard(
             onTap: () {
               BlastRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
             },
             description: "They are available with fin spacing options of 4, 4.5, 6.7, 9, and 10mm.",
             heading: "Evaporators Units",
@@ -123,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
             image: "cold-room.png",
             onTap: () {
               ColdRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
             },
           ),
           CalculatorCard(
@@ -132,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
             image: "blast-room.png",
             onTap: () {
               BlastRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
             },
           ),
           CalculatorCard(
@@ -141,7 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
             image: "selector.png",
             onTap: () {
               BlastRoomCalculator().setDefaultValues();
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
             },
           ),
         ],
