@@ -11,8 +11,8 @@ class SelectorCalculator {
     sharedPref.setEvaporationTemp(0.0);
     sharedPref.setDT1(5.0);
     sharedPref.setFinSpacing(4.0);
-    sharedPref.setRH(96);
-    sharedPref.setCondenserTemp(28);
+    sharedPref.setRH("96");
+    sharedPref.setCondenserTemp(45);
     sharedPref.setDT1(5);
     sharedPref.setDefrosting("Electrical defrost");
   }

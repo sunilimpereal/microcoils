@@ -83,9 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context)
                   .push(CupertinoPageRoute(builder: (context) => const ColdRoomCalculatorScreen()));
             },
-            description: "Integral horsepower condensing units and indoor cooling units.",
+            description: "",
             heading: "Cold Room Calculator",
-            image: ImageConstants.condensingUnit,
+            // image: ImageConstants.condensingUnit,
           ),
           HomeCard(
             onTap: () {
@@ -93,10 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).push(
                   CupertinoPageRoute(builder: (context) => const BlastRoomCalculatorScreen()));
             },
-            description:
-                "Heat Exchangers are uniquely affordable, of extremely high quality, and delivered on time",
+            description: "",
             heading: "Blast Room Calculator",
-            image: ImageConstants.coils,
+            // image: ImageConstants.coils,
           ),
           HomeCard(
             onTap: () {

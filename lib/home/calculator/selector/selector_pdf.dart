@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:intl/intl.dart';
 import 'package:microcoils/home/calculator/selector/data/sharedpref_selector.dart';
+import 'package:microcoils/utils/ApiUrls.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:printing/printing.dart';
 
 import '../../../main.dart';
 import 'data/air_cooler_response.dart';
@@ -21,19 +23,25 @@ class SelectorPdf {
   SharedPrefSelector selector = SharedPrefSelector();
   createPage() async {
     image = pw.MemoryImage(
-      (await rootBundle.load('assets/images/logo.png')).buffer.asUint8List(),
+      (await rootBundle.load('assets/images/microcoil_logo_address.jpeg')).buffer.asUint8List(),
     );
+    final netImage =
+        await networkImage("${ApiUrls.baseUrl}/img/${filteredEvapoaratorDtoList.evImg}.jpg");
+    log("${ApiUrls.baseUrl}/img/${filteredEvapoaratorDtoList.evImg}.jpg");
     //to create pages
     doc.addPage(
       pw.MultiPage(
-        pageTheme: const pw.PageTheme(),
+        pageTheme: const pw.PageTheme(
+          margin: pw.EdgeInsets.all(36),
+        ),
         header: _buildHeader,
         build: (context) => [
           _contentHeader(context),
           _modelDetails(context),
+          _refrigirantDetails(context),
           _fansDetails(context),
           _casingDetails(context),
-          _refrigirantDetails(context),
+          pw.Container(width: 250, child: pw.Image(netImage)),
         ],
       ),
     );
@@ -54,7 +62,7 @@ class SelectorPdf {
 
     final directory = await getApplicationSupportDirectory();
     final path = directory.path;
-    String name = "Selector-" + "${DateTime.now().toUtc().toString()}";
+    String name = "Selector-${DateTime.now().toUtc()}";
     final file = File("$path/$name.pdf");
     File f = await file.writeAsBytes(await doc.save());
     OpenFile.open(f.path);
@@ -86,7 +94,7 @@ class SelectorPdf {
           pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
-              pw.Container(width: 100, child: pw.Image(image)),
+              pw.Container(width: 150, child: pw.Image(image)),
               pw.Container(
                 child: pw.Column(
                   children: [
@@ -117,7 +125,7 @@ class SelectorPdf {
                   children: [
                     pw.Text("Model    "),
                     pw.Text(
-                        "${filteredEvapoaratorDtoList.series} ${filteredEvapoaratorDtoList.model} ${filteredEvapoaratorDtoList.surfaceArea} ${filteredEvapoaratorDtoList.finSpacing} ${filteredEvapoaratorDtoList.d}"),
+                        "${filteredEvapoaratorDtoList.series} ${filteredEvapoaratorDtoList.model} ${filteredEvapoaratorDtoList.surfaceArea.round()} ${filteredEvapoaratorDtoList.finSpacing.round()}D"),
                   ],
                 ),
               ),
@@ -125,7 +133,7 @@ class SelectorPdf {
           ),
           _buildUnderlinedText("Capacity Details:"),
           _buildTwoColumnContent(
-              title: "Capacity", data: "${filteredEvapoaratorDtoList.actulCapacity} (kW)"),
+              title: "Capacity", data: "${filteredEvapoaratorDtoList.actulCapacity.round()} (kW)"),
           _buildTwoColumnContent(
               title: "Surface", data: "${filteredEvapoaratorDtoList.surfaceArea} (m2)"),
           _buildTwoColumnContent(
@@ -161,16 +169,17 @@ class SelectorPdf {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          _buildUnderlinedText("Fans Details:"),
+          _buildUnderlinedText("Fans:"),
           _buildTwoColumnContent(
-              title: "Number of Fans", data: "${filteredEvapoaratorDtoList.fan}"),
-          _buildTwoColumnContent(title: "Fan Diameter", data: "9 (mm)"),
+              title: "Fan Detail",
+              data: "${filteredEvapoaratorDtoList.fan.replaceFirst("X", "(mm) X")}"),
           _buildTwoColumnContent(
               title: "Fin Spacing", data: "${filteredEvapoaratorDtoList.finSpacing} (mm)"),
           _buildTwoColumnContent(
-              title: "Fan Voltage", data: "${filteredEvapoaratorDtoList.voltage} (V)"),
-          _buildTwoColumnContent(title: "Fan Current", data: "0.46/0.56 (A)"),
-          _buildTwoColumnContent(title: "Defrost Type", data: sharedPrefSelector.defrosting),
+              title: "Fan Voltage", data: "${filteredEvapoaratorDtoList.voltage}"),
+          _buildTwoColumnContent(
+              title: "Fan Power", data: "${filteredEvapoaratorDtoList.fanpower} (W)"),
+          _buildTwoColumnContent(title: "Defrost Type", data: "${sharedPrefSelector.defrosting}"),
         ],
       ),
     );
@@ -204,7 +213,7 @@ class SelectorPdf {
 
   pw.Widget _buildUnderlinedText(String text) {
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: pw.EdgeInsets.symmetric(vertical: 8),
       child: pw.Text(
         text,
         style: pw.TextStyle(decoration: pw.TextDecoration.underline),
@@ -226,7 +235,7 @@ class SelectorPdf {
   pw.Widget _buildColumn(String data) {
     return pw.Expanded(
       child: pw.Container(
-        margin: pw.EdgeInsets.all(8),
+        margin: pw.EdgeInsets.all(0),
         child: pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [

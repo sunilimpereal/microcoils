@@ -7,13 +7,13 @@ class HomeCard extends StatefulWidget {
   final Function onTap;
   final String heading;
   final String description;
-  final String image;
+  final String? image;
   const HomeCard({
     super.key,
     required this.onTap,
     required this.description,
     required this.heading,
-    required this.image,
+    this.image,
   });
 
   @override
@@ -78,7 +78,10 @@ class _HomeCardState extends State<HomeCard> with SingleTickerProviderStateMixin
                               children: [
                                 Text(
                                   widget.heading,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black),
                                 ),
                                 SizedBox(
                                   height: 8,
@@ -104,7 +107,11 @@ class _HomeCardState extends State<HomeCard> with SingleTickerProviderStateMixin
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.354,
                         height: MediaQuery.of(context).size.height * 0.2,
-                        decoration: BoxDecoration(image: DecorationImage(image: AssetImage(widget.image), fit: BoxFit.fitHeight)),
+                        decoration: widget.image == null
+                            ? null
+                            : BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(widget.image ?? ''), fit: BoxFit.fitHeight)),
                       ),
                     ),
                   )
@@ -124,6 +131,7 @@ class _HomeCardState extends State<HomeCard> with SingleTickerProviderStateMixin
   }
 
   _restoreButtonSize() {
-    Future.delayed(const Duration(milliseconds: clickAnimationDuration), () => animationController.reverse());
+    Future.delayed(
+        const Duration(milliseconds: clickAnimationDuration), () => animationController.reverse());
   }
 }

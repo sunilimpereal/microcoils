@@ -12,8 +12,9 @@ class InputTileNumber extends StatefulWidget {
   final double gapValue;
   final String unit;
   final Function(String)? onChanged;
+
   const InputTileNumber({
-    super.key,
+    Key? key,
     required this.title,
     required this.initialValue,
     required this.gapValue,
@@ -21,7 +22,7 @@ class InputTileNumber extends StatefulWidget {
     required this.minValue,
     required this.unit,
     this.onChanged,
-  });
+  }) : super(key: key);
 
   @override
   State<InputTileNumber> createState() => _InputTileNumberState();
@@ -55,7 +56,6 @@ class _InputTileNumberState extends State<InputTileNumber> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPressMoveUpdate: (details) {
-        // log(details.offsetFromOrigin.toString());
         setState(() {
           percentage = ((details.localPosition.dx / MediaQuery.of(context).size.width * 1.2));
           value = (widget.maxValue * percentage).ceil();
@@ -86,7 +86,8 @@ class _InputTileNumberState extends State<InputTileNumber> {
         ),
         tileColor: isActive ? ColorConstants.primary.withOpacity(0.2) : null,
         enableFeedback: true,
-        title: Text(widget.title, style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle),
+        title:
+            Text(widget.title, style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle),
         trailing: Container(
           width: MediaQuery.of(context).size.width * 0.35,
           alignment: Alignment.centerRight,
@@ -101,6 +102,15 @@ class _InputTileNumberState extends State<InputTileNumber> {
                 child: TextField(
                   controller: _controller,
                   onChanged: ((value) {
+                    if (double.parse(value) > widget.maxValue) {
+                      _controller.text = widget.maxValue.toString();
+                      return;
+                    }
+                    if (double.parse(value) < widget.minValue) {
+                      _controller.text = widget.minValue.toString();
+                      return;
+                    }
+
                     widget.onChanged == null ? null : widget.onChanged!(_controller.text);
                   }),
                   focusNode: focusNode,

@@ -27,7 +27,7 @@ class SharedPrefSelector {
   String get refrigerant => _sharedPref!.getString(Refrigerant) ?? "";
   double get evaporationTemp => _sharedPref!.getDouble(EvaporationTemp) ?? 0.0;
   double get condenserTemp => _sharedPref!.getDouble(CondenserTemp) ?? 0.0;
-  double get rh => _sharedPref!.getDouble(RH) ?? 0;
+  String get rh => _sharedPref!.getString(RH) ?? "96";
   double get dt1 => _sharedPref!.getDouble(DT1) ?? 0.0;
   double get roomTemp => _sharedPref!.getDouble(RoomTemp) ?? 0.0;
   double get finSpacing => _sharedPref!.getDouble(FinSpacing) ?? 0.0;
@@ -58,8 +58,8 @@ class SharedPrefSelector {
     _sharedPref!.setDouble(CondenserTemp, value);
   }
 
-  setRH(double value) {
-    _sharedPref!.setDouble(RH, value);
+  setRH(String value) {
+    _sharedPref!.setString(RH, value);
   }
 
   setDT1(double value) {
