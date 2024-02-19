@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:microcoils/home/screen/home_navigation.dart';
 import 'package:microcoils/home/screen/home_screen.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 
 import '../authentication/screens/login.dart';
 import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _SplashScreen();
@@ -37,14 +38,15 @@ class _SplashScreen extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.25,
-                decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/logo.png"))),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(image: AssetImage("assets/images/logo.png"))),
               ),
             ),
           ),
@@ -68,6 +70,16 @@ class _SplashScreen extends State<SplashScreen> {
               ),
             ),
           ),
+          Positioned(
+            top: MediaQuery.of(context).size.width * 0.1,
+            right: MediaQuery.of(context).size.width * 0.05,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: MediaQuery.of(context).size.width * 0.3,
+              decoration:
+                  BoxDecoration(image: DecorationImage(image: AssetImage(ImageConstants.logo_old))),
+            ),
+          ),
         ],
       ),
     );
@@ -82,7 +94,8 @@ class MyCustomClipperTop extends CustomClipper<Path> {
 
     Path path = Path()
       ..lineTo(0, size.height)
-      ..cubicTo(controlPoint1.dx, controlPoint1.dy, controlPoint2.dx, controlPoint2.dy, size.width, 0)
+      ..cubicTo(
+          controlPoint1.dx, controlPoint1.dy, controlPoint2.dx, controlPoint2.dy, size.width, 0)
       ..close();
     return path;
   }
@@ -101,7 +114,8 @@ class MyCustomClipperBottom extends CustomClipper<Path> {
       ..moveTo(0, size.height)
       ..lineTo(size.width, size.height)
       ..lineTo(size.width, 0)
-      ..cubicTo(controlPoint2.dx, controlPoint2.dy, controlPoint1.dx, controlPoint1.dy, 0, size.height)
+      ..cubicTo(
+          controlPoint2.dx, controlPoint2.dy, controlPoint1.dx, controlPoint1.dy, 0, size.height)
       ..close();
     return path;
   }

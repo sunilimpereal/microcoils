@@ -35,6 +35,7 @@ class _CalculatorTabBarState extends State<CalculatorTabBar> with TickerProvider
           labelStyle: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
+          unselectedLabelColor: Theme.of(context).colorScheme.onPrimary,
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
           indicatorColor: Theme.of(context).colorScheme.onPrimary,
           indicatorSize: TabBarIndicatorSize.label,
@@ -88,13 +89,17 @@ class _CalculatorTabBarState extends State<CalculatorTabBar> with TickerProvider
                               child: Text(
                                 widget.tabs[index],
                                 style: widget.currentIndex == index
-                                    ? TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ColorConstants.secondary.shade800)
+                                    ? TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: ColorConstants.secondary.shade800)
                                     : const TextStyle(),
                               ),
                             ),
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 400),
-                              width: widget.currentIndex == index ? widget.tabs[index].length * 7 : 0,
+                              width:
+                                  widget.currentIndex == index ? widget.tabs[index].length * 7 : 0,
                               height: 5.5,
                               decoration: BoxDecoration(
                                 color: ColorConstants.primary.shade300,

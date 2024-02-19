@@ -21,7 +21,7 @@ class SelectorScreen extends StatefulWidget {
 }
 
 class _SelectorScreenState extends State<SelectorScreen> with SingleTickerProviderStateMixin {
-  List<String> tabs = ["Unit Selection", "Thermodynamics", "Air Collers"];
+  List<String> tabs = ["Unit Selection", "Thermodynamics", "Air Coolers"];
   int currentIndex = 0;
   late PageController pageController;
   late TabController _tabController;

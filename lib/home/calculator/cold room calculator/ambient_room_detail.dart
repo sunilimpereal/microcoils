@@ -75,7 +75,7 @@ class _AmbientRoomFormState extends State<AmbientRoomForm> {
                     title: "Room Temperature",
                     initialValue: sharedPrefColdRoom.roomTemperature,
                     maxValue: 100,
-                    minValue: 0,
+                    minValue: -50,
                     gapValue: 1,
                     unit: "°C",
                     onChanged: (value) {
@@ -105,7 +105,8 @@ class _AmbientRoomFormState extends State<AmbientRoomForm> {
                     inititalValue: "${sharedPrefsColdRoom.insulationThickness.toInt()} mm",
                     onChanged: (value) {
                       setState(() {});
-                      sharedPrefColdRoom.setInsulationThickness(double.parse(value.replaceAll(" mm", "")));
+                      sharedPrefColdRoom
+                          .setInsulationThickness(double.parse(value.replaceAll(" mm", "")));
                     },
                   ),
                   InputTileOption(

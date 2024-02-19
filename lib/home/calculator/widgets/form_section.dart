@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:microcoils/utils/constants/color_constants.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 
 class FormSection extends StatefulWidget {
   final List<Widget> formItems;
@@ -40,14 +40,17 @@ class _FormSectionState extends State<FormSection> with SingleTickerProviderStat
               });
             },
             child: Container(
-              color: ColorConstants.secondary.shade200,
+              // color: ColorConstants.secondary.shade200,
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(ImageConstants.redbg), fit: BoxFit.fitWidth)),
               child: Row(
                 children: [
                   Text(
                     widget.title,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: ColorConstants.secondary.shade800
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white
                         // fontSize: 16,
                         ),
                   ),
@@ -55,6 +58,7 @@ class _FormSectionState extends State<FormSection> with SingleTickerProviderStat
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(
                       isOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                      color: Colors.white,
                     ),
                   )
                 ],

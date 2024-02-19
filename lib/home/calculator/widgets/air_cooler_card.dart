@@ -19,6 +19,7 @@ class _AirCoolerCardState extends State<AirCoolerCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Card(
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 5,
         child: Padding(
@@ -47,7 +48,8 @@ class _AirCoolerCardState extends State<AirCoolerCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Capacity", style: Theme.of(context).textTheme.caption),
-                      Text("${widget.filteredEvapoaratorDtoList.actulCapacity} m3/h",
+                      Text(
+                          "${widget.filteredEvapoaratorDtoList.actulCapacity.toStringAsFixed(2)} KW",
                           style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),
@@ -99,7 +101,7 @@ class _AirCoolerCardState extends State<AirCoolerCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Surface", style: Theme.of(context).textTheme.caption),
-                      Text("${widget.filteredEvapoaratorDtoList.surfaceArea} m3",
+                      Text("${widget.filteredEvapoaratorDtoList.surfaceArea} m2",
                           style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),

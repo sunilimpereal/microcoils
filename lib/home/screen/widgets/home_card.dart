@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 
 class HomeCard extends StatefulWidget {
   final Function onTap;
@@ -64,13 +62,14 @@ class _HomeCardState extends State<HomeCard> with SingleTickerProviderStateMixin
                       height: MediaQuery.of(context).size.height * 0.15,
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: EdgeInsets.all(12),
+                          // color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                              image: AssetImage(ImageConstants.cardBg), fit: BoxFit.cover)),
+                      padding: const EdgeInsets.all(12),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width * 0.55,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,19 +77,19 @@ class _HomeCardState extends State<HomeCard> with SingleTickerProviderStateMixin
                               children: [
                                 Text(
                                   widget.heading,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Text(
                                   widget.description,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                               ],

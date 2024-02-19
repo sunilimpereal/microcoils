@@ -6,7 +6,8 @@ ThemeData theme1 = ThemeData(
     primaryColor: ColorConstants.primary,
     // useMaterial3: true,
     // colorScheme: ColorScheme.fromSeed(seedColor: ColorConstants.primary, secondary: ColorConstants.secondary),
-    colorScheme: ColorScheme.fromSeed(seedColor: ColorConstants.primary, secondary: ColorConstants.secondary),
+    colorScheme: ColorScheme.fromSeed(
+        seedColor: ColorConstants.primary, secondary: ColorConstants.secondary),
     // colorSchemeSeed: ColorConstants.primary,
     fontFamily: "Montserrat",
     // colorScheme: ColorScheme(
@@ -50,4 +51,9 @@ ThemeData theme1 = ThemeData(
     iconTheme: IconThemeData(color: ColorConstants.secondary.shade400),
     listTileTheme: ListTileThemeData(iconColor: ColorConstants.secondary.shade400),
     primaryTextTheme: TextTheme(),
-    appBarTheme: AppBarTheme(elevation: 0));
+    appBarTheme: AppBarTheme(
+        elevation: 0,
+        backgroundColor: ColorScheme.fromSeed(
+                seedColor: ColorConstants.primary, secondary: ColorConstants.secondary)
+            .primary,
+        foregroundColor: Colors.white));

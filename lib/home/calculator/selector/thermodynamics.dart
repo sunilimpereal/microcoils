@@ -30,10 +30,10 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
               InputTileNumber(
                 title: "Capacity",
                 initialValue: sharedPrefSelector.capacity,
-                maxValue: 5,
+                maxValue: 9999999,
                 minValue: 1,
                 gapValue: 5,
-                unit: "kW",
+                unit: "KW",
                 onChanged: (value) {
                   sharedPrefSelector.setCapacity(double.parse(value));
                 },
@@ -43,7 +43,7 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                 options: const [
                   "R134A",
                   "R404A",
-                  "R507b",
+                  "R507A",
                   "R22",
                 ],
                 inititalValue: sharedPrefSelector.refrigerant,
@@ -60,30 +60,35 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                 unit: "°C",
                 onChanged: (value) {
                   sharedPrefSelector.setEvaporationTemp(double.parse(value));
+                  sharedPrefSelector.setRoomTemp((double.parse(value) + sharedPrefSelector.dt1));
                   setState(() {});
                 },
               ),
-              AbsorbPointer(
-                child: InputTileNumber(
-                  title: "Condensing Temp",
-                  initialValue: sharedPrefSelector.condenserTemp,
-                  maxValue: 100,
-                  minValue: 0,
-                  gapValue: 5,
-                  unit: "°C",
-                  onChanged: (value) {
-                    sharedPrefSelector.setCondenserTemp(double.parse(value));
-                  },
-                ),
-              ),
               InputTileNumber(
-                key: Key(dt1.toString()),
-                title: "DT1",
-                initialValue: sharedPrefSelector.dt1,
-                maxValue: 15,
+                title: "Condensing Temp",
+                initialValue: sharedPrefSelector.condenserTemp,
+                maxValue: 100,
                 minValue: 0,
                 gapValue: 5,
-                unit: "",
+                unit: "°C",
+                onChanged: (value) {
+                  sharedPrefSelector.setCondenserTemp(double.parse(value));
+                },
+              ),
+              InputTileOption(
+                title: "DT1",
+                options: const [
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                ],
+                inititalValue: sharedPrefSelector.dt1.toString(),
                 onChanged: (value) {
                   double value1 = double.parse(value);
                   sharedPrefSelector.setDT1(value1);
@@ -96,6 +101,9 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                   }
                   if (value1 == 7.0) {
                     sharedPrefSelector.setRH("83");
+                  }
+                  if (value1 == 8.0) {
+                    sharedPrefSelector.setRH("78");
                   }
                   if (value1 == 9.0) {
                     sharedPrefSelector.setRH("74");
@@ -112,7 +120,8 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                   if (value1 == 13.0) {
                     sharedPrefSelector.setRH("62");
                   }
-
+                  sharedPrefSelector
+                      .setRoomTemp((sharedPrefSelector.evaporationTemp + sharedPrefSelector.dt1));
                   setState(() {});
                 },
               ),
@@ -124,6 +133,7 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                     "96",
                     "90",
                     "83",
+                    "78",
                     "74",
                     "71",
                     "67",
@@ -155,7 +165,7 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
                 title: "Room Temp",
                 initialValue: sharedPrefSelector.evaporationTemp + sharedPrefSelector.dt1,
                 maxValue: 100,
-                minValue: 0,
+                minValue: -50,
                 gapValue: 5,
                 unit: "°C",
                 onChanged: (value) {
@@ -205,3 +215,6 @@ class _ThermodynamicsTabState extends State<ThermodynamicsTab> {
     );
   }
 }
+
+
+// 

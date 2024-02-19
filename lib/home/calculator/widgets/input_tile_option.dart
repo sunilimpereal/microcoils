@@ -32,7 +32,7 @@ class _InputTileOptionState extends State<InputTileOption> {
   late FixedExtentScrollController scrollController;
 
   // overlay
-  GlobalKey _key = LabeledGlobalKey("button_icon");
+  final GlobalKey _key = LabeledGlobalKey("button_icon");
   late OverlayEntry _overlayEntry;
   late Size buttonSize;
   late Offset buttonPosition;
@@ -46,7 +46,8 @@ class _InputTileOptionState extends State<InputTileOption> {
   @override
   void initState() {
     log(widget.inititalValue.toString());
-    scrollController = FixedExtentScrollController(initialItem: widget.options.indexOf(widget.inititalValue));
+    scrollController =
+        FixedExtentScrollController(initialItem: widget.options.indexOf(widget.inititalValue));
     super.initState();
   }
 
@@ -69,9 +70,10 @@ class _InputTileOptionState extends State<InputTileOption> {
                   child: Container(
                     child: Material(
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
+                      color: CupertinoColors.white,
                       elevation: 10,
-                      child: dropDown(),
+                      child:
+                          Container(color: CupertinoColors.tertiarySystemFill, child: dropDown()),
                     ),
                   ),
                 ),
@@ -163,7 +165,7 @@ class _InputTileOptionState extends State<InputTileOption> {
           text,
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.black, fontSize: 14),
+          style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -174,34 +176,39 @@ class _InputTileOptionState extends State<InputTileOption> {
         ? Column(
             children: widget.options.map((e) {
             return ListTile(
-              title: Text(e),
+              title: Text(
+                e,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
               onTap: () {
                 closeMenu();
                 widget.onChanged!(e);
-                scrollController.animateToItem(widget.options.indexOf(e), duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                scrollController.animateToItem(widget.options.indexOf(e),
+                    duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                 setState(() {});
               },
             );
           }).toList())
-        : Container(
+        : SizedBox(
             height: MediaQuery.of(context).size.height / 3,
             width: MediaQuery.of(context).size.width / 3,
             child: SingleChildScrollView(
               child: Column(
                   children: widget.options.map((e) {
                 return ListTile(
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     horizontal: 7,
                   ),
                   title: Text(
                     e,
                     overflow: TextOverflow.clip,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                   onTap: () {
                     closeMenu();
                     widget.onChanged!(e);
-                    scrollController.animateToItem(widget.options.indexOf(e), duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                    scrollController.animateToItem(widget.options.indexOf(e),
+                        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                     setState(() {});
                   },
                 );

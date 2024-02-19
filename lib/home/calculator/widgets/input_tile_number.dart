@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:microcoils/utils/constants/color_constants.dart';
@@ -36,8 +37,12 @@ class _InputTileNumberState extends State<InputTileNumber> {
   double percentage = 0;
   bool isActive = false;
 
-  TextStyle activeStyle = const TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
-  TextStyle inActiveStyle = TextStyle(color: ColorConstants.secondary.shade800);
+  TextStyle activeStyle = const TextStyle(
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+  TextStyle inActiveStyle =
+      TextStyle(color: ColorConstants.secondary.shade800, fontWeight: FontWeight.bold);
   @override
   void initState() {
     focusNode.addListener(() {
@@ -89,41 +94,64 @@ class _InputTileNumberState extends State<InputTileNumber> {
         title:
             Text(widget.title, style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle),
         trailing: Container(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: MediaQuery.of(context).size.width * 0.39,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.15,
-                alignment: Alignment.centerRight,
-                child: TextField(
-                  controller: _controller,
-                  onChanged: ((value) {
-                    if (double.parse(value) > widget.maxValue) {
-                      _controller.text = widget.maxValue.toString();
-                      return;
-                    }
-                    if (double.parse(value) < widget.minValue) {
-                      _controller.text = widget.minValue.toString();
-                      return;
-                    }
+                decoration: BoxDecoration(
+                  color: CupertinoColors.tertiarySystemFill,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.16,
+                      height: 40,
+                      alignment: Alignment.centerRight,
+                      child: TextField(
+                        controller: _controller,
+                        onChanged: ((value) {
+                          if (double.parse(value) > widget.maxValue) {
+                            _controller.text = widget.maxValue.toString();
+                            return;
+                          }
+                          if (double.parse(value) < widget.minValue) {
+                            _controller.text = widget.minValue.toString();
+                            return;
+                          }
 
-                    widget.onChanged == null ? null : widget.onChanged!(_controller.text);
-                  }),
-                  focusNode: focusNode,
-                  textAlign: TextAlign.end,
-                  style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle,
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  keyboardType: TextInputType.number,
+                          widget.onChanged == null ? null : widget.onChanged!(_controller.text);
+                        }),
+                        focusNode: focusNode,
+                        textAlign: TextAlign.end,
+                        style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle,
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(0),
+                            isDense: true),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 04.0),
+                        child: Center(
+                          child: Text(
+                            " ${widget.unit}",
+                            style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Text(
-                " ${widget.unit}",
-                style: isActive || focusNode.hasFocus ? activeStyle : inActiveStyle,
-              )
             ],
           ),
         ),

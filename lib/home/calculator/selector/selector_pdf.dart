@@ -7,9 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:microcoils/home/calculator/selector/data/sharedpref_selector.dart';
 import 'package:microcoils/utils/ApiUrls.dart';
 import 'package:open_file/open_file.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../../../main.dart';
@@ -20,11 +19,16 @@ class SelectorPdf {
   SelectorPdf({required this.filteredEvapoaratorDtoList});
   final doc = pw.Document();
   late final image;
+  late final microcool_logo;
   SharedPrefSelector selector = SharedPrefSelector();
   createPage() async {
     image = pw.MemoryImage(
       (await rootBundle.load('assets/images/microcoil_logo_address.jpeg')).buffer.asUint8List(),
     );
+    microcool_logo = pw.MemoryImage(
+      (await rootBundle.load('assets/images/logo.png')).buffer.asUint8List(),
+    );
+
     final netImage =
         await networkImage("${ApiUrls.baseUrl}/img/${filteredEvapoaratorDtoList.evImg}.jpg");
     log("${ApiUrls.baseUrl}/img/${filteredEvapoaratorDtoList.evImg}.jpg");
@@ -42,6 +46,18 @@ class SelectorPdf {
           _fansDetails(context),
           _casingDetails(context),
           pw.Container(width: 250, child: pw.Image(netImage)),
+          importantNotes(context),
+        ],
+      ),
+    );
+    doc.addPage(
+      pw.MultiPage(
+        pageTheme: const pw.PageTheme(
+          margin: pw.EdgeInsets.all(36),
+        ),
+        build: (context) => [
+          pw.Container(width: 300, child: pw.Image(netImage)),
+          importantNotes(context),
         ],
       ),
     );
@@ -78,7 +94,7 @@ class SelectorPdf {
     await FlutterShare.shareFile(
       title: 'Example share',
       text: 'Example share text',
-      filePath: f.path as String,
+      filePath: f.path,
     );
     // OpenFile.open(f.path);
     log(f.path);
@@ -88,13 +104,14 @@ class SelectorPdf {
     String formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         children: [
           pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
               pw.Container(width: 150, child: pw.Image(image)),
+              pw.Container(width: 150, child: pw.Image(microcool_logo)),
               pw.Container(
                 child: pw.Column(
                   children: [
@@ -111,7 +128,7 @@ class SelectorPdf {
 
   _modelDetails(pw.Context context) {
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -119,13 +136,13 @@ class SelectorPdf {
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
               pw.Container(
-                margin: pw.EdgeInsets.all(8),
+                margin: const pw.EdgeInsets.all(8),
                 child: pw.Row(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text("Model    "),
                     pw.Text(
-                        "${filteredEvapoaratorDtoList.series} ${filteredEvapoaratorDtoList.model} ${filteredEvapoaratorDtoList.surfaceArea.round()} ${filteredEvapoaratorDtoList.finSpacing.round()}D"),
+                        "${filteredEvapoaratorDtoList.series} ${filteredEvapoaratorDtoList.model} ${filteredEvapoaratorDtoList.surfaceArea.round()}  ${filteredEvapoaratorDtoList.finSpacing == filteredEvapoaratorDtoList.finSpacing.roundToDouble() ? filteredEvapoaratorDtoList.finSpacing.round() : filteredEvapoaratorDtoList.finSpacing}D"),
                   ],
                 ),
               ),
@@ -133,7 +150,8 @@ class SelectorPdf {
           ),
           _buildUnderlinedText("Capacity Details:"),
           _buildTwoColumnContent(
-              title: "Capacity", data: "${filteredEvapoaratorDtoList.actulCapacity.round()} (kW)"),
+              title: "Capacity",
+              data: "${filteredEvapoaratorDtoList.actulCapacity.toStringAsFixed(2)} (kW)"),
           _buildTwoColumnContent(
               title: "Surface", data: "${filteredEvapoaratorDtoList.surfaceArea} (m2)"),
           _buildTwoColumnContent(
@@ -147,7 +165,7 @@ class SelectorPdf {
 
   _refrigirantDetails(pw.Context context) {
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -158,6 +176,8 @@ class SelectorPdf {
               title: "Evaporator Temp.", data: "${filteredEvapoaratorDtoList.evTemp} (C)"),
           _buildTwoColumnContent(
               title: "DT1", data: "${filteredEvapoaratorDtoList.tempCorrectionFactor} (K)"),
+          _buildTwoColumnContent(
+              title: "Condenser Temp.", data: "${filteredEvapoaratorDtoList.condTemp} (C)"),
         ],
       ),
     );
@@ -165,47 +185,59 @@ class SelectorPdf {
 
   _fansDetails(pw.Context context) {
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           _buildUnderlinedText("Fans:"),
           _buildTwoColumnContent(
               title: "Fan Detail",
-              data: "${filteredEvapoaratorDtoList.fan.replaceFirst("X", "(mm) X")}"),
+              data: filteredEvapoaratorDtoList.fan.replaceFirst("X", "(mm) X")),
           _buildTwoColumnContent(
-              title: "Fin Spacing", data: "${filteredEvapoaratorDtoList.finSpacing} (mm)"),
-          _buildTwoColumnContent(
-              title: "Fan Voltage", data: "${filteredEvapoaratorDtoList.voltage}"),
+              title: "Fin Spacing", data: "${filteredEvapoaratorDtoList.finSpacing} D"),
+          _buildTwoColumnContent(title: "Fan Voltage", data: filteredEvapoaratorDtoList.voltage),
           _buildTwoColumnContent(
               title: "Fan Power", data: "${filteredEvapoaratorDtoList.fanpower} (W)"),
-          _buildTwoColumnContent(title: "Defrost Type", data: "${sharedPrefSelector.defrosting}"),
+          _buildTwoColumnContent(title: "Defrost Type", data: sharedPrefSelector.defrosting),
+          _buildTwoColumnContent(
+              title: "Defrost Total Power", data: filteredEvapoaratorDtoList.defTtl.toString()),
         ],
       ),
     );
   }
 
   _casingDetails(pw.Context context) {
+    double num =
+        double.parse(filteredEvapoaratorDtoList.fan[filteredEvapoaratorDtoList.fan.length - 1]);
+    log(num.toString());
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          _buildUnderlinedText("Casing Details:"),
+          _buildUnderlinedText("Casing Details: AIMg3/Powder coated RAL 9003/SS-304"),
           _buildTwoColumnContent(title: "Tubes", data: filteredEvapoaratorDtoList.tubeMaterial),
           _buildTwoColumnContent(title: "Fins", data: filteredEvapoaratorDtoList.finMaterial),
           _buildTwoColumnContent(title: "A", data: "${filteredEvapoaratorDtoList.a} (mm)"),
           _buildTwoColumnContent(title: "B", data: "${filteredEvapoaratorDtoList.b} (mm)"),
-          _buildTwoColumnContent(title: "C", data: "${filteredEvapoaratorDtoList.c} (mm)"),
-          _buildTwoColumnContent(title: "D", data: "${filteredEvapoaratorDtoList.d} (mm)"),
+          num == 1.0
+              ? pw.Container()
+              : _buildTwoColumnContent(title: "C", data: "${filteredEvapoaratorDtoList.c} (mm)"),
+          num == 1.0 || num == 2.0
+              ? pw.Container()
+              : _buildTwoColumnContent(title: "D", data: "${filteredEvapoaratorDtoList.d} (mm)"),
           _buildTwoColumnContent(title: "E", data: "${filteredEvapoaratorDtoList.e} (mm)"),
           _buildTwoColumnContent(title: "F", data: "${filteredEvapoaratorDtoList.f} (mm)"),
           _buildTwoColumnContent(title: "G", data: "${filteredEvapoaratorDtoList.g} (mm)"),
           _buildTwoColumnContent(title: "H", data: "${filteredEvapoaratorDtoList.h} (mm)"),
           _buildTwoColumnContent(title: "H1", data: "${filteredEvapoaratorDtoList.h1} (mm)"),
           _buildTwoColumnContent(title: "H2", data: "${filteredEvapoaratorDtoList.h2} (mm)"),
-          _buildTwoColumnContent(title: "Inlet Connection", data: "12 (mm)"),
-          _buildTwoColumnContent(title: "Outlet Connection", data: "19 (mm)"),
+          _buildTwoColumnContent(
+              title: "Inlet Connection",
+              data: "${filteredEvapoaratorDtoList.refrigerantInlet} (mm)"),
+          _buildTwoColumnContent(
+              title: "Outlet Connection",
+              data: "${filteredEvapoaratorDtoList.refrigerantOutlet} (mm)"),
         ],
       ),
     );
@@ -213,10 +245,13 @@ class SelectorPdf {
 
   pw.Widget _buildUnderlinedText(String text) {
     return pw.Padding(
-      padding: pw.EdgeInsets.symmetric(vertical: 8),
+      padding: const pw.EdgeInsets.symmetric(vertical: 8),
       child: pw.Text(
         text,
-        style: pw.TextStyle(decoration: pw.TextDecoration.underline),
+        style: pw.TextStyle(
+          decoration: pw.TextDecoration.underline,
+          fontWeight: pw.FontWeight.bold,
+        ),
       ),
     );
   }
@@ -235,13 +270,40 @@ class SelectorPdf {
   pw.Widget _buildColumn(String data) {
     return pw.Expanded(
       child: pw.Container(
-        margin: pw.EdgeInsets.all(0),
+        margin: const pw.EdgeInsets.all(0),
         child: pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text(data),
           ],
         ),
+      ),
+    );
+  }
+
+  pw.Widget importantNotes(pw.Context context) {
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(8),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            "Important Notes:",
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+          pw.SizedBox(height: 8),
+          pw.Text(
+              "1. The actual product may vary slightly from the image and dimensions shown above"),
+          pw.Text("2. It is advised that the unit should not be used in corrosive atmospheres"),
+          pw.Text(
+              "3. The fan data could change slightly depending on manufacturer design and data changes."),
+          pw.Text(
+              "4. The technical and commercial information provided is property of MICRO COILS & REFRIGERATION PVT LTD."),
+          pw.Text("6. MICRO COILS heat exchangers are manufactured to world class label."),
+          pw.Text("7. For further details please contact us at sales@microcoils.in"),
+        ],
       ),
     );
   }

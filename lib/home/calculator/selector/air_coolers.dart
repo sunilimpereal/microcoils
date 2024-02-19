@@ -35,7 +35,7 @@ class _AirCoolersState extends State<AirCoolers> {
                 k2Refrigerant: sharedPrefSelector.refrigerant,
                 roomTemp: sharedPrefSelector.roomTemp.toString(),
                 series: sharedPrefSelector.model,
-                tempCorrectionFactor: "5")),
+                tempCorrectionFactor: sharedPrefSelector.dt1.toString())),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

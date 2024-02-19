@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 
 import '../../../main.dart';
 import 'data/sharedpref_bastroom.dart';
@@ -31,6 +31,7 @@ class BlastRoomPdf {
           productDefinotion(context),
           heatLoadResults(context),
           hourlyLoadText(context: context, load: "${sharedPrefColdRoom.hourlyEqipmentLoad} kW"),
+          importantNotes(context),
         ],
       ),
     );
@@ -38,7 +39,10 @@ class BlastRoomPdf {
 
   pw.Widget _buildHeader(pw.Context context) {
     return pw.Column(
-      children: [pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: []), if (context.pageNumber > 1) pw.SizedBox(height: 20)],
+      children: [
+        pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: []),
+        if (context.pageNumber > 1) pw.SizedBox(height: 20)
+      ],
     );
   }
 
@@ -62,7 +66,7 @@ class BlastRoomPdf {
     await FlutterShare.shareFile(
       title: 'Example share',
       text: 'Example share text',
-      filePath: f.path as String,
+      filePath: f.path,
     );
     // OpenFile.open(f.path);
     log(f.path);
@@ -70,7 +74,7 @@ class BlastRoomPdf {
 
   _contentHeader(pw.Context context) {
     return pw.Padding(
-      padding: pw.EdgeInsets.all(8),
+      padding: const pw.EdgeInsets.all(8),
       child: pw.Column(
         children: [
           pw.Row(
@@ -124,7 +128,8 @@ class BlastRoomPdf {
       tableEelment(title: "insulation Thickness", value: "${blastRoom.insulationThickness} mm"),
       tableEelment(title: "Wall insulation Material", value: blastRoom.insulation),
     ], tableElementsCol2: [
-      tableEelment(title: "Room internal Volume", value: "${blastRoom.roomInternalVolume} m \u00B3"),
+      tableEelment(
+          title: "Room internal Volume", value: "${blastRoom.roomInternalVolume} m \u00B3"),
       tableEelment(title: "Cold Room Location ", value: blastRoom.roomLocation),
       tableEelment(title: "Room temperature ", value: "${blastRoom.roomTemperature} °C"),
       tableEelment(title: "Room RH", value: "${blastRoom.roomRH} %"),
@@ -140,10 +145,15 @@ class BlastRoomPdf {
       tableEelment(title: "Product Final Temperature", value: "${blastRoom.productFinalTemp} °C"),
     ], tableElementsCol2: [
       tableEelment(title: "Respiraton Heat", value: "${blastRoom.respirationHeat} W/kg*24 h"),
-      tableEelment(title: "Specific Heat above Freezing", value: "${blastRoom.specificHeatAboveFreezing} kJ/kg°C"),
-      tableEelment(title: "Specific Heat below Freezing", value: "${blastRoom.specificHeatBelowFreezing} kJ/kg°C"),
+      tableEelment(
+          title: "Specific Heat above Freezing",
+          value: "${blastRoom.specificHeatAboveFreezing} kJ/kg°C"),
+      tableEelment(
+          title: "Specific Heat below Freezing",
+          value: "${blastRoom.specificHeatBelowFreezing} kJ/kg°C"),
       tableEelment(title: "Freezing temp", value: "${blastRoom.freezingTemp} °C"),
-      tableEelment(title: "Latent Heat of Freeezing", value: "${blastRoom.latentHeatOFFreezing} kJ/kg"),
+      tableEelment(
+          title: "Latent Heat of Freeezing", value: "${blastRoom.latentHeatOFFreezing} kJ/kg"),
     ]);
   }
 
@@ -248,6 +258,33 @@ class BlastRoomPdf {
               fontSize: 15,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  pw.Widget importantNotes(pw.Context context) {
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(8),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            "Important Notes:",
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+          pw.SizedBox(height: 8),
+          pw.Text(
+              "1. The actual product may vary slightly from the image and dimensions shown above"),
+          pw.Text("2. It is advised that the unit should not be used in corrosive atmospheres"),
+          pw.Text(
+              "3. The fan data could change slightly depending on manufacturer design and data changes."),
+          pw.Text(
+              "4. The technical and commercial information provided is property of MICRO COILS & REFRIGERATION PVT LTD."),
+          pw.Text("6. MICRO COILS heat exchangers are manufactured to world class label."),
+          pw.Text("7. For further details please contact us at sales@microcoils.in"),
         ],
       ),
     );

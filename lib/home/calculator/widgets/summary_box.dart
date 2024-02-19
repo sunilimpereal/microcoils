@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:microcoils/utils/constants/image_constaants.dart';
 
 class SummaryBox extends StatefulWidget {
   final String title;
@@ -21,7 +22,7 @@ class _SummaryBoxState extends State<SummaryBox> {
       child: Material(
         borderRadius: BorderRadius.circular(8),
         elevation: 10,
-        color: Colors.grey.shade100,
+        // color: Colors.grey.shade100,
         shadowColor: Colors.grey.withOpacity(0.1),
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -44,16 +45,14 @@ class _SummaryBoxState extends State<SummaryBox> {
       width: double.maxFinite,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
+        // color: Colors.green.withOpacity(0.1),
+        image: DecorationImage(image: AssetImage(ImageConstants.redbg), fit: BoxFit.fitWidth),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(4),
       child: Text(
         widget.title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
       ),
     );
   }
@@ -120,7 +119,8 @@ class _DetailItemState extends State<DetailItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(widget.summaryBoxItem.title, style: bold ? active : inActive),
-            Text(widget.summaryBoxItem.value + " " + widget.summaryBoxItem.unit, style: bold ? active : inActive),
+            Text("${widget.summaryBoxItem.value} ${widget.summaryBoxItem.unit}",
+                style: bold ? active : inActive),
           ],
         ),
       ),

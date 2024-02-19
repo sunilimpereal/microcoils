@@ -1,13 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter_share/flutter_share.dart';
 import 'package:microcoils/main.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 
 import '../../../../utils/shared_preferences.dart';
 import '../data/sharedpref_coldroom.dart';
@@ -30,6 +29,7 @@ class ColdRoomPdf {
           internalFactors(context),
           heatLoadResults(context),
           hourlyLoadText(context: context, load: "${sharedPrefColdRoom.hourlyEqipmentLoad} kW"),
+          importantNotes(context),
         ],
       ),
     );
@@ -37,7 +37,10 @@ class ColdRoomPdf {
 
   pw.Widget _buildHeader(pw.Context context) {
     return pw.Column(
-      children: [pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: []), if (context.pageNumber > 1) pw.SizedBox(height: 20)],
+      children: [
+        pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: []),
+        if (context.pageNumber > 1) pw.SizedBox(height: 20)
+      ],
     );
   }
 
@@ -60,7 +63,7 @@ class ColdRoomPdf {
     await FlutterShare.shareFile(
       title: 'Example share',
       text: 'Example share text',
-      filePath: f.path as String,
+      filePath: f.path,
     );
     // OpenFile.open(f.path);
     log(f.path);
@@ -125,14 +128,19 @@ class ColdRoomPdf {
     return tableBox(context: context, heading: "Product Definition", tableElementsCol1: [
       tableEelment(title: "Product", value: "${coldRoom.productProduct} "),
       tableEelment(title: "Product Quantity", value: "${coldRoom.quantity} kg"),
-      tableEelment(title: "Product Storage \nDensity", value: "${coldRoom.storageDensity} kg/	m \u00B3"),
+      tableEelment(
+          title: "Product Storage \nDensity", value: "${coldRoom.storageDensity} kg/	m \u00B3"),
       tableEelment(title: "Daily Product \nLoading", value: "${coldRoom.dailyLoadPerc} kg"),
       tableEelment(title: "Product Incoming \nTemperature", value: "${coldRoom.productIncTemp} °C"),
       tableEelment(title: "Product Final \nTemperature", value: "${coldRoom.productFinalTemp} °C"),
     ], tableElementsCol2: [
       tableEelment(title: "Product family", value: "${coldRoom.productFamily} "),
-      tableEelment(title: "Specific Heat above \nFreezing", value: "${coldRoom.specificHeatAboveFrez} kJ/kg°C"),
-      tableEelment(title: "Specific Heat below \nFreezing", value: "${coldRoom.specificHeatBelowFrez} kJ/kg°C"),
+      tableEelment(
+          title: "Specific Heat above \nFreezing",
+          value: "${coldRoom.specificHeatAboveFrez} kJ/kg°C"),
+      tableEelment(
+          title: "Specific Heat below \nFreezing",
+          value: "${coldRoom.specificHeatBelowFrez} kJ/kg°C"),
       tableEelment(title: "Freezing temp", value: "${coldRoom.freezingTemp} °C"),
       tableEelment(title: "Respiraton Heat", value: "${coldRoom.respirationHeat} W/kg*24 h"),
     ]);
@@ -159,7 +167,8 @@ class ColdRoomPdf {
     ], tableElementsCol2: [
       tableEelment(title: "Safety Factor", value: "${coldRoom.safetyFactor} %"),
       tableEelment(title: "Cooling Time", value: "${coldRoom.coolingTime} h"),
-      tableEelment(title: "Comperessor Operating \ntime", value: "${coldRoom.compressorOperatingTime} h"),
+      tableEelment(
+          title: "Comperessor Operating \ntime", value: "${coldRoom.compressorOperatingTime} h"),
     ]);
   }
 
@@ -246,6 +255,33 @@ class ColdRoomPdf {
               fontSize: 15,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  pw.Widget importantNotes(pw.Context context) {
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(8),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            "Important Notes:",
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+          pw.SizedBox(height: 8),
+          pw.Text(
+              "1. The actual product may vary slightly from the image and dimensions shown above"),
+          pw.Text("2. It is advised that the unit should not be used in corrosive atmospheres"),
+          pw.Text(
+              "3. The fan data could change slightly depending on manufacturer design and data changes."),
+          pw.Text(
+              "4. The technical and commercial information provided is property of MICRO COILS & REFRIGERATION PVT LTD."),
+          pw.Text("6. MICRO COILS heat exchangers are manufactured to world class label."),
+          pw.Text("7. For further details please contact us at sales@microcoils.in"),
         ],
       ),
     );

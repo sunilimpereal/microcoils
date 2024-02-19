@@ -4,13 +4,14 @@ import 'package:microcoils/home/calculator/selector/selector_screen.dart';
 import 'package:microcoils/home/screen/widgets/calculator_card.dart';
 import 'package:microcoils/home/screen/widgets/drawer.dart';
 import 'package:microcoils/home/screen/widgets/home_card.dart';
+import 'package:microcoils/utils/ApiUrls.dart';
 import 'package:microcoils/utils/constants/image_constaants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../calculator/blast room calculator/blast_room_calculator.dart';
 import '../calculator/blast room calculator/data/calculator.dart';
 import '../calculator/cold room calculator/cold_room_calculator_screen.dart';
 import '../calculator/cold room calculator/data/calculator.dart';
-import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,29 +27,49 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: Icon(Icons.sort),
+          icon: const Icon(
+            Icons.sort,
+            color: Colors.white,
+          ),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
         // leading: Container(),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none_rounded))
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {
+              _launchUrl(url: ApiUrls.aboutUsurl);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.email_outlined),
+            onPressed: () {
+              _launchUrl(url: ApiUrls.contactUsUrl);
+            },
+          ),
+          const SizedBox(
+            width: 8,
+          )
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Column(
-        children: [
-          heading(),
-          SizedBox(
-            height: 16,
-          ),
-          // calculatorSelectorSection(),
-          calculatoeListSection()
-        ],
+      body: Container(
+        decoration: const BoxDecoration(),
+        child: Column(
+          children: [
+            heading(),
+            const SizedBox(
+              height: 16,
+            ),
+            // calculatorSelectorSection(),
+            calculatoeListSection()
+          ],
+        ),
       ),
     );
   }
@@ -64,8 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           children: <TextSpan>[
             TextSpan(text: 'All Kinds of'),
-            TextSpan(
-                text: ' Heating and Cooling ', style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: ' Heating and Cooling ', style: TextStyle(fontWeight: FontWeight.bold)),
             TextSpan(text: 'Applications'),
           ],
         ),
@@ -103,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context)
                   .push(CupertinoPageRoute(builder: (context) => const SelectorScreen()));
             },
-            description: "They are available with fin spacing options of 4, 4.5, 6.7, 9, and 10mm.",
+            description: "Fin Spacing ranges from 4 to 10mm",
             heading: "Evaporators Units",
             image: ImageConstants.evaporatorUnits,
           )
@@ -157,5 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl({required String url}) async {
+    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

@@ -114,7 +114,7 @@ class OptionButton extends StatelessWidget {
           title,
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: title == option ? null : ColorConstants.primary,
+            color: title == option ? Colors.white : ColorConstants.primary,
           ),
         ),
       ),
